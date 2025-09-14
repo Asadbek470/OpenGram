@@ -641,6 +641,25 @@
             margin-top: 10px;
             color: #0095f6;
         }
+        
+        .sync-button {
+            margin-top: 10px;
+            padding: 10px 15px;
+            background: #405DE6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .sync-button:hover {
+            background: #304ac1;
+        }
     </style>
 </head>
 <body>
@@ -687,15 +706,19 @@
         <div class="device-section">
             <div class="device-title">
                 <i class="fas fa-mobile-alt"></i>
-                <span>Эмуляция работы с разных устройств</span>
+                <span>Межплатформенная синхронизация</span>
             </div>
             <div class="device-buttons">
                 <div class="device-btn active" id="thisDeviceBtn">Это устройство</div>
                 <div class="device-btn" id="otherDeviceBtn">Другое устройство</div>
             </div>
             <div class="device-info">
-                <p>В реальном приложении посты сохраняются на сервере и доступны с любого устройства.</p>
-                <p>Здесь вы можете эмулировать работу с другого устройства:</p>
+                <p>Все посты сохраняются на сервере и доступны с любого устройства.</p>
+                <p>Нажмите кнопку "Синхронизировать", чтобы обновить ленту и получить новые посты с сервера.</p>
+                <button class="sync-button" id="syncButton">
+                    <i class="fas fa-sync-alt"></i>
+                    Синхронизировать
+                </button>
                 <div class="sync-info">
                     <i class="fas fa-sync-alt"></i>
                     <span id="syncStatus">Синхронизировано с сервером</span>
@@ -901,6 +924,7 @@
             const syncStatus = document.getElementById('syncStatus');
             const postsCount = document.getElementById('postsCount');
             const generatedId = document.getElementById('generatedId');
+            const syncButton = document.getElementById('syncButton');
             
             let currentView = 'thisDevice';
             let serverData = getServerDatabase();
@@ -976,6 +1000,24 @@
                     renderPosts(serverData.posts);
                     showNotification('Режим: другое устройство. Посты загружены с сервера.');
                 }, 1000);
+            });
+            
+            // Кнопка синхронизации
+            syncButton.addEventListener('click', function() {
+                syncStatus.textContent = 'Синхронизация...';
+                syncButton.disabled = true;
+                
+                // Эмуляция задержки синхронизации
+                setTimeout(() => {
+                    // Загружаем свежие данные с сервера
+                    serverData = getServerDatabase();
+                    renderPosts(serverData.posts);
+                    updatePostsCount();
+                    
+                    syncStatus.textContent = 'Синхронизировано с сервером';
+                    syncButton.disabled = false;
+                    showNotification('Все посты синхронизированы!');
+                }, 1500);
             });
             
             // Поиск по ID

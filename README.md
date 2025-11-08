@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OpenGram - Межплатформенная соцсеть</title>
+    <title>FaceXI - Социальная сеть</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -15,171 +15,457 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
+        :root {
+            --primary: #1877f2;
+            --secondary: #42b72a;
+            --bg-color: #f0f2f5;
+            --card-bg: #ffffff;
+            --text-primary: #050505;
+            --text-secondary: #65676b;
+            --border: #dddfe2;
+        }
+        
         body {
-            background-color: #fafafa;
-            color: #262626;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
             line-height: 1.6;
         }
         
         .container {
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 0 15px;
         }
         
+        /* Header */
         header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 0;
-            border-bottom: 1px solid #dbdbdb;
-            background-color: white;
+            background-color: var(--card-bg);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             position: sticky;
             top: 0;
             z-index: 100;
         }
         
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+        }
+        
         .logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: #405DE6;
             display: flex;
             align-items: center;
-            gap: 10px;
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary);
             cursor: pointer;
         }
         
-        .search-container {
-            display: flex;
-            align-items: center;
-            background: #efefef;
-            border-radius: 8px;
-            padding: 10px 16px;
-            width: 300px;
+        .logo i {
+            margin-right: 8px;
         }
         
-        .search-container input {
-            border: none;
-            background: transparent;
-            margin-left: 10px;
+        .search-bar {
+            flex: 0 1 680px;
+            margin: 0 20px;
+        }
+        
+        .search-bar input {
             width: 100%;
-            outline: none;
-            font-size: 14px;
+            padding: 10px 15px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            background-color: var(--bg-color);
+            font-size: 15px;
         }
         
         .nav-icons {
             display: flex;
-            gap: 20px;
+            gap: 15px;
         }
         
-        .icon {
-            font-size: 22px;
-            cursor: pointer;
-            width: 30px;
-            height: 30px;
+        .nav-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #262626;
+            background-color: var(--bg-color);
+            cursor: pointer;
+            transition: background-color 0.3s;
         }
         
-        .icon:hover {
-            color: #405DE6;
+        .nav-icon.active {
+            background-color: var(--primary);
+            color: white;
         }
         
-        .main-content {
-            display: grid;
-            grid-template-columns: 1fr 350px;
-            gap: 30px;
-            margin-top: 30px;
+        .nav-icon:hover {
+            background-color: var(--border);
         }
         
-        .posts {
-            display: flex;
-            flex-direction: column;
-            gap: 25px;
+        .nav-icon.active:hover {
+            background-color: var(--primary);
         }
         
-        .post {
-            background: white;
-            border: 1px solid #dbdbdb;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-        }
-        
-        .post-header {
-            display: flex;
-            align-items: center;
-            padding: 14px;
-            gap: 12px;
-            border-bottom: 1px solid #efefef;
-        }
-        
-        .avatar {
-            width: 38px;
-            height: 38px;
+        .user-avatar {
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
-            background: #405DE6;
+            background-color: var(--primary);
             color: white;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
-            font-size: 16px;
+            cursor: pointer;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        /* Main Content */
+        .main-content {
+            display: flex;
+            margin-top: 20px;
+            gap: 20px;
+        }
+        
+        /* Left Sidebar */
+        .left-sidebar {
+            flex: 0 0 280px;
+        }
+        
+        .sidebar-card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .user-info .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 10px;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+        }
+        
+        .sidebar-menu li {
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+        
+        .sidebar-menu li:hover {
+            background-color: var(--bg-color);
+        }
+        
+        .sidebar-menu li.active {
+            background-color: var(--bg-color);
+            font-weight: bold;
+        }
+        
+        .sidebar-menu li i {
+            margin-right: 10px;
+            width: 24px;
+            text-align: center;
+            color: var(--primary);
+        }
+        
+        .shortcuts {
+            margin-top: 20px;
+        }
+        
+        .shortcuts h3 {
+            font-size: 17px;
+            margin-bottom: 10px;
+            color: var(--text-secondary);
+        }
+        
+        /* Feed */
+        .feed {
+            flex: 1;
+        }
+        
+        .create-post {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        
+        .post-input {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .post-input .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--secondary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 10px;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .post-input input {
+            flex: 1;
+            padding: 12px 15px;
+            border-radius: 20px;
+            border: none;
+            background-color: var(--bg-color);
+            font-size: 17px;
+            cursor: pointer;
+        }
+        
+        .post-actions {
+            display: flex;
+            justify-content: space-between;
+            padding-top: 10px;
+            border-top: 1px solid var(--border);
+        }
+        
+        .post-action {
+            display: flex;
+            align-items: center;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .post-action:hover {
+            background-color: var(--bg-color);
+        }
+        
+        .post-action i {
+            margin-right: 8px;
+            font-size: 20px;
+        }
+        
+        .photo-video i { color: #45bd62; }
+        .feeling i { color: #f7b928; }
+        
+        /* Stories */
+        .stories {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            padding: 10px 0;
+        }
+        
+        .story {
+            flex: 0 0 120px;
+            height: 200px;
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+        }
+        
+        .story-bg {
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            transition: transform 0.3s;
+        }
+        
+        .story:hover .story-bg {
+            transform: scale(1.05);
+        }
+        
+        .story-user {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: white;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+        }
+        
+        .create-story {
+            background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.6));
+        }
+        
+        .create-story .plus {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            border: 4px solid var(--card-bg);
+        }
+        
+        .create-story .text {
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        /* Posts */
+        .post {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        
+        .post-header {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+        }
+        
+        .post-header .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 10px;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .post-user {
+            flex: 1;
+        }
+        
+        .post-user .name {
+            font-weight: 600;
+        }
+        
+        .post-user .time {
+            font-size: 13px;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+        }
+        
+        .post-user .time i {
+            margin-left: 5px;
         }
         
         .post-content {
-            width: 100%;
+            padding: 0 15px 15px;
+        }
+        
+        .post-text {
+            margin-bottom: 10px;
         }
         
         .post-image {
             width: 100%;
-            height: auto;
-            display: block;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            max-height: 500px;
+            object-fit: cover;
         }
         
-        .post-actions {
-            padding: 14px;
+        .post-stats {
             display: flex;
             justify-content: space-between;
-            border-bottom: 1px solid #efefef;
+            padding: 10px 15px;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            color: var(--text-secondary);
+            font-size: 14px;
         }
         
-        .action-buttons {
+        .post-actions-row {
             display: flex;
-            gap: 16px;
+            justify-content: space-around;
+            padding: 5px 15px;
         }
         
-        .post-likes {
-            padding: 0 14px;
-            font-weight: bold;
-            margin: 8px 0;
-            font-size: 14px;
+        .post-action-btn {
+            display: flex;
+            align-items: center;
+            padding: 8px 5px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            flex: 1;
+            justify-content: center;
         }
         
-        .post-caption {
-            padding: 0 14px 14px;
-            font-size: 14px;
+        .post-action-btn:hover {
+            background-color: var(--bg-color);
         }
         
-        .post-comments {
-            padding: 14px;
-            border-top: 1px solid #efefef;
-            background: #fafafa;
+        .post-action-btn i {
+            margin-right: 8px;
+            font-size: 18px;
+        }
+        
+        .post-action-btn.active {
+            color: var(--primary);
+        }
+        
+        .comments {
+            padding: 10px 15px;
         }
         
         .comment {
             display: flex;
-            margin-bottom: 12px;
-            align-items: flex-start;
+            margin-bottom: 10px;
         }
         
-        .comment-avatar {
+        .comment .avatar {
             width: 32px;
             height: 32px;
             border-radius: 50%;
-            background: #3897f0;
+            background-color: var(--secondary);
             color: white;
             display: flex;
             align-items: center;
@@ -187,316 +473,91 @@
             font-weight: bold;
             margin-right: 10px;
             flex-shrink: 0;
-            font-size: 13px;
+            background-size: cover;
+            background-position: center;
         }
         
         .comment-content {
-            flex-grow: 1;
+            background-color: var(--bg-color);
+            padding: 8px 12px;
+            border-radius: 18px;
+            flex: 1;
         }
         
-        .comment-author {
-            font-weight: bold;
+        .comment .name {
+            font-weight: 600;
             font-size: 13px;
-            margin-right: 5px;
+        }
+        
+        .comment .text {
+            font-size: 14px;
+        }
+        
+        .comment-actions {
+            display: flex;
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 5px;
+        }
+        
+        .comment-action {
+            margin-right: 15px;
+            cursor: pointer;
         }
         
         .add-comment {
             display: flex;
-            margin-top: 14px;
-        }
-        
-        .add-comment input {
-            flex-grow: 1;
-            border: 1px solid #dbdbdb;
-            border-radius: 20px;
-            padding: 10px 16px;
-            outline: none;
-            font-size: 14px;
-        }
-        
-        .sidebar {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-        
-        .profile-card {
-            background: white;
-            border: 1px solid #dbdbdb;
-            border-radius: 12px;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        
-        .profile-avatar {
-            width: 85px;
-            height: 85px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #FD1D1D);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 32px;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-        
-        .profile-info {
-            text-align: center;
-            margin-bottom: 15px;
-        }
-        
-        .profile-name {
-            font-weight: bold;
-            font-size: 16px;
-            margin-bottom: 5px;
-        }
-        
-        .profile-bio {
-            color: #8e8e8e;
-            font-size: 14px;
-            max-width: 250px;
-        }
-        
-        .profile-stats {
-            display: flex;
-            gap: 20px;
-            margin: 15px 0;
-        }
-        
-        .stat {
-            text-align: center;
-        }
-        
-        .stat-value {
-            font-weight: bold;
-            font-size: 16px;
-        }
-        
-        .stat-label {
-            font-size: 13px;
-            color: #8e8e8e;
-        }
-        
-        .edit-profile-btn {
-            padding: 8px 20px;
-            border: 1px solid #dbdbdb;
-            border-radius: 8px;
-            background: transparent;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 14px;
-            width: 100%;
-        }
-        
-        .edit-profile-btn:hover {
-            background: #fafafa;
-        }
-        
-        .suggestions {
-            background: white;
-            border: 1px solid #dbdbdb;
-            border-radius: 12px;
-            padding: 20px;
-        }
-        
-        .suggestion-title {
-            font-weight: bold;
-            margin-bottom: 15px;
-            font-size: 16px;
-        }
-        
-        .suggestion-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 15px;
-        }
-        
-        .suggestion-user {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        
-        .follow-btn {
-            color: #0095f6;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 13px;
-        }
-        
-        .follow-btn:hover {
-            color: #0056b3;
-        }
-        
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: #4CAF50;
-            color: white;
-            padding: 15px 20px;
-            border-radius: 8px;
-            display: none;
-            z-index: 1000;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-        
-        .notification.error {
-            background: #f44336;
-        }
-        
-        .active-like {
-            color: #ed4956;
-        }
-        
-        .stories {
-            display: flex;
-            gap: 18px;
-            overflow-x: auto;
-            padding: 20px 0;
-            margin-bottom: 20px;
-            scrollbar-width: none;
-        }
-        
-        .stories::-webkit-scrollbar {
-            display: none;
-        }
-        
-        .story {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            cursor: pointer;
-            flex-shrink: 0;
-        }
-        
-        .story-avatar {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            margin-bottom: 8px;
-            padding: 3px;
-        }
-        
-        .story-avatar-inner {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            background: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #262626;
-            font-size: 26px;
-        }
-        
-        .story-username {
-            font-size: 13px;
-            max-width: 70px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-        
-        .create-post {
-            background: white;
-            border: 1px solid #dbdbdb;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 25px;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-        
-        .create-post textarea {
-            width: 100%;
-            padding: 14px;
-            border: 1px solid #dbdbdb;
-            border-radius: 8px;
-            resize: none;
-            height: 100px;
-            font-size: 14px;
-        }
-        
-        .post-options {
-            display: flex;
-            gap: 15px;
-        }
-        
-        .post-option {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            cursor: pointer;
-            padding: 10px 16px;
-            border-radius: 20px;
-            background: #f0f0f0;
-            font-size: 14px;
-        }
-        
-        .post-option:hover {
-            background: #e0e0e0;
-        }
-        
-        .publish-btn {
-            align-self: flex-end;
-            padding: 10px 20px;
-            background: #405DE6;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 14px;
-        }
-        
-        .publish-btn:hover {
-            background: #304ac1;
-        }
-        
-        .post-id {
-            font-size: 12px;
-            color: #8e8e8e;
-            margin-top: 12px;
-            padding: 8px 0;
-            border-top: 1px solid #efefef;
-        }
-        
-        .search-results {
-            margin-top: 20px;
-            background: white;
-            border-radius: 12px;
-            border: 1px solid #dbdbdb;
-            padding: 20px;
-        }
-        
-        .search-results h3 {
-            margin-bottom: 15px;
-            font-size: 18px;
-        }
-        
-        .search-help {
-            font-size: 14px;
-            color: #8e8e8e;
             margin-top: 10px;
         }
         
-        .hidden {
-            display: none;
+        .add-comment input {
+            flex: 1;
+            padding: 10px 15px;
+            border-radius: 20px;
+            border: none;
+            background-color: var(--bg-color);
+            font-size: 14px;
         }
         
+        /* Right Sidebar */
+        .right-sidebar {
+            flex: 0 0 280px;
+        }
+        
+        .contacts h3 {
+            font-size: 17px;
+            margin-bottom: 10px;
+            color: var(--text-secondary);
+        }
+        
+        .contact {
+            display: flex;
+            align-items: center;
+            padding: 8px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        
+        .contact:hover {
+            background-color: var(--bg-color);
+        }
+        
+        .contact .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 10px;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        /* Auth Modal */
         .auth-modal {
             display: none;
             position: fixed;
@@ -504,340 +565,695 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.7);
+            background-color: rgba(0, 0, 0, 0.5);
             z-index: 1000;
             align-items: center;
             justify-content: center;
         }
         
-        .auth-container {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
+        .auth-content {
+            background-color: white;
+            border-radius: 8px;
             width: 400px;
-            text-align: center;
+            max-width: 90%;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .auth-header {
+            padding: 15px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .auth-header h2 {
+            font-size: 20px;
+        }
+        
+        .close-auth {
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+        
+        .auth-body {
+            padding: 20px;
         }
         
         .auth-tabs {
             display: flex;
             margin-bottom: 20px;
-            border-bottom: 1px solid #dbdbdb;
+            border-bottom: 1px solid var(--border);
         }
         
         .auth-tab {
             flex: 1;
-            padding: 12px;
+            text-align: center;
+            padding: 10px;
             cursor: pointer;
-            border-bottom: 2px solid transparent;
+            border-bottom: 3px solid transparent;
         }
         
         .auth-tab.active {
-            border-bottom: 2px solid #405DE6;
+            border-bottom: 3px solid var(--primary);
             font-weight: bold;
         }
         
-        .auth-form input {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 15px;
-            border: 1px solid #dbdbdb;
-            border-radius: 5px;
-            font-size: 14px;
+        .auth-form {
+            display: none;
         }
         
-        .auth-form button {
+        .auth-form.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid var(--border);
+            font-size: 15px;
+        }
+        
+        .auth-button {
             width: 100%;
             padding: 12px;
-            background: #405DE6;
+            background-color: var(--primary);
             color: white;
             border: none;
             border-radius: 5px;
-            cursor: pointer;
+            font-size: 16px;
             font-weight: bold;
-            font-size: 14px;
+            cursor: pointer;
+            margin-top: 10px;
         }
         
-        .auth-form button:hover {
-            background: #304ac1;
+        .auth-button:hover {
+            background-color: #166fe5;
         }
         
-        .sms-notice {
-            font-size: 14px;
-            color: #8e8e8e;
-            margin-top: 15px;
+        /* Profile Modal */
+        .profile-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
         }
         
-        .no-posts {
-            text-align: center;
-            padding: 40px;
-            background: white;
-            border-radius: 12px;
-            border: 1px solid #dbdbdb;
+        .profile-content {
+            background-color: white;
+            border-radius: 8px;
+            width: 500px;
+            max-width: 90%;
+            max-height: 90%;
+            overflow-y: auto;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
         }
         
-        .no-posts i {
-            font-size: 40px;
-            color: #dbdbdb;
-            margin-bottom: 15px;
+        .profile-header {
+            padding: 15px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
         
-        .no-posts p {
-            color: #8e8e8e;
+        .profile-header h2 {
+            font-size: 20px;
+        }
+        
+        .close-profile {
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+        
+        .profile-body {
+            padding: 20px;
+        }
+        
+        .profile-avatar {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             margin-bottom: 20px;
         }
         
-        .device-section {
-            background: white;
-            border-radius: 12px;
-            border: 1px solid #dbdbdb;
-            padding: 20px;
-            margin-bottom: 25px;
-        }
-        
-        .device-title {
-            font-weight: bold;
-            margin-bottom: 15px;
-            font-size: 18px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .device-buttons {
-            display: flex;
-            gap: 15px;
-        }
-        
-        .device-btn {
-            padding: 10px 20px;
-            border: 1px solid #dbdbdb;
-            border-radius: 8px;
-            background: #fafafa;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 14px;
-            flex: 1;
-            text-align: center;
-        }
-        
-        .device-btn.active {
-            background: #405DE6;
+        .profile-avatar .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: var(--primary);
             color: white;
-            border-color: #405DE6;
-        }
-        
-        .device-info {
-            margin-top: 15px;
-            padding: 15px;
-            background: #f9f9f9;
-            border-radius: 8px;
-            font-size: 14px;
-        }
-        
-        .sync-info {
             display: flex;
             align-items: center;
-            gap: 10px;
-            margin-top: 10px;
-            color: #0095f6;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 40px;
+            margin-bottom: 10px;
+            background-size: cover;
+            background-position: center;
         }
         
-        .sync-button {
-            margin-top: 10px;
-            padding: 10px 15px;
-            background: #405DE6;
+        .change-avatar {
+            color: var(--primary);
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        /* Create Story Modal */
+        .story-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .story-content {
+            background-color: white;
+            border-radius: 8px;
+            width: 500px;
+            max-width: 90%;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .story-header {
+            padding: 15px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .story-header h2 {
+            font-size: 20px;
+        }
+        
+        .close-story {
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+        
+        .story-body {
+            padding: 20px;
+        }
+        
+        .story-preview {
+            width: 100%;
+            height: 300px;
+            background-color: var(--bg-color);
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .story-preview-text {
+            color: var(--text-secondary);
+        }
+        
+        .story-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .story-button {
+            flex: 1;
+            padding: 10px;
+            background-color: var(--primary);
             color: white;
             border: none;
-            border-radius: 8px;
-            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
             font-weight: bold;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            cursor: pointer;
         }
         
-        .sync-button:hover {
-            background: #304ac1;
+        /* Create Post Modal */
+        .post-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .post-content {
+            background-color: white;
+            border-radius: 8px;
+            width: 500px;
+            max-width: 90%;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .post-modal-header {
+            padding: 15px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .post-modal-header h2 {
+            font-size: 20px;
+        }
+        
+        .close-post {
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+        
+        .post-modal-body {
+            padding: 20px;
+        }
+        
+        .post-modal-text {
+            width: 100%;
+            min-height: 100px;
+            border: none;
+            resize: none;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+        
+        .post-modal-text:focus {
+            outline: none;
+        }
+        
+        .post-modal-preview {
+            width: 100%;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: none;
+        }
+        
+        .post-modal-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .post-modal-button {
+            flex: 1;
+            padding: 10px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        /* Responsive */
+        @media (max-width: 1100px) {
+            .left-sidebar {
+                flex: 0 0 240px;
+            }
+            
+            .right-sidebar {
+                flex: 0 0 240px;
+            }
+        }
+        
+        @media (max-width: 900px) {
+            .left-sidebar {
+                display: none;
+            }
+            
+            .right-sidebar {
+                display: none;
+            }
+            
+            .search-bar {
+                flex: 0 1 400px;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .search-bar {
+                display: none;
+            }
+            
+            .nav-icons {
+                gap: 10px;
+            }
+        }
+        
+        .hidden {
+            display: none !important;
         }
     </style>
 </head>
 <body>
-    <!-- Уведомление -->
-    <div class="notification" id="notification"></div>
-
-    <!-- Модальное окно авторизации -->
+    <!-- Auth Modal -->
     <div class="auth-modal" id="authModal">
-        <div class="auth-container">
-            <div class="auth-tabs">
-                <div class="auth-tab active" id="loginTab">Вход</div>
-                <div class="auth-tab" id="registerTab">Регистрация</div>
+        <div class="auth-content">
+            <div class="auth-header">
+                <h2>FaceXI</h2>
+                <div class="close-auth" id="closeAuth">&times;</div>
             </div>
-            <div class="auth-form">
-                <input type="tel" id="phoneInput" placeholder="Номер телефона">
-                <div id="smsCodeContainer" style="display: none;">
-                    <input type="text" id="smsCodeInput" placeholder="Код из SMS">
+            <div class="auth-body">
+                <div class="auth-tabs">
+                    <div class="auth-tab active" data-tab="login">Вход</div>
+                    <div class="auth-tab" data-tab="register">Регистрация</div>
                 </div>
-                <button id="authButton">Продолжить</button>
-                <div class="sms-notice" id="smsNotice">Мы отправим SMS с кодом подтверждения на ваш номер</div>
+                
+                <form class="auth-form active" id="loginForm">
+                    <div class="form-group">
+                        <label for="loginEmail">Email</label>
+                        <input type="email" id="loginEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Пароль</label>
+                        <input type="password" id="loginPassword" required>
+                    </div>
+                    <button type="submit" class="auth-button">Войти</button>
+                </form>
+                
+                <form class="auth-form" id="registerForm">
+                    <div class="form-group">
+                        <label for="registerName">Имя и фамилия</label>
+                        <input type="text" id="registerName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerEmail">Email</label>
+                        <input type="email" id="registerEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerPassword">Пароль</label>
+                        <input type="password" id="registerPassword" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerBirthday">Дата рождения</label>
+                        <input type="date" id="registerBirthday" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerGender">Пол</label>
+                        <select id="registerGender" required>
+                            <option value="">Выберите пол</option>
+                            <option value="male">Мужской</option>
+                            <option value="female">Женский</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="auth-button">Зарегистрироваться</button>
+                </form>
             </div>
         </div>
     </div>
-
+    
+    <!-- Profile Modal -->
+    <div class="profile-modal" id="profileModal">
+        <div class="profile-content">
+            <div class="profile-header">
+                <h2>Редактирование профиля</h2>
+                <div class="close-profile" id="closeProfile">&times;</div>
+            </div>
+            <div class="profile-body">
+                <div class="profile-avatar">
+                    <div class="avatar" id="profileAvatarPreview"></div>
+                    <div class="change-avatar" id="changeAvatar">Изменить фото профиля</div>
+                    <input type="file" id="avatarUpload" accept="image/*" class="hidden">
+                </div>
+                
+                <div class="form-group">
+                    <label for="profileName">Имя и фамилия</label>
+                    <input type="text" id="profileName">
+                </div>
+                <div class="form-group">
+                    <label for="profileBio">О себе</label>
+                    <input type="text" id="profileBio" placeholder="Расскажите о себе">
+                </div>
+                <div class="form-group">
+                    <label for="profileLocation">Местоположение</label>
+                    <input type="text" id="profileLocation" placeholder="Где вы живете?">
+                </div>
+                <button class="auth-button" id="saveProfile">Сохранить изменения</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Create Story Modal -->
+    <div class="story-modal" id="storyModal">
+        <div class="story-content">
+            <div class="story-header">
+                <h2>Создать историю</h2>
+                <div class="close-story" id="closeStory">&times;</div>
+            </div>
+            <div class="story-body">
+                <div class="story-preview" id="storyPreview">
+                    <div class="story-preview-text">Ваша история будет здесь</div>
+                </div>
+                <input type="file" id="storyUpload" accept="image/*" class="hidden">
+                <div class="story-actions">
+                    <button class="story-button" id="uploadStoryBtn">Загрузить фото</button>
+                    <button class="story-button" id="publishStoryBtn">Опубликовать</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Create Post Modal -->
+    <div class="post-modal" id="postModal">
+        <div class="post-content">
+            <div class="post-modal-header">
+                <h2>Создать пост</h2>
+                <div class="close-post" id="closePost">&times;</div>
+            </div>
+            <div class="post-modal-body">
+                <textarea class="post-modal-text" id="postText" placeholder="Что у вас нового?"></textarea>
+                <img class="post-modal-preview" id="postPreview">
+                <input type="file" id="postUpload" accept="image/*" class="hidden">
+                <div class="post-modal-actions">
+                    <button class="post-modal-button" id="uploadPostImageBtn">Добавить фото</button>
+                    <button class="post-modal-button" id="publishPostBtn">Опубликовать</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Header -->
+    <header id="mainHeader" class="hidden">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-globe-americas"></i>
+                    <span>FaceXI</span>
+                </div>
+                
+                <div class="search-bar">
+                    <input type="text" placeholder="Поиск в FaceXI">
+                </div>
+                
+                <div class="nav-icons">
+                    <div class="nav-icon active" data-page="home">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <div class="nav-icon" data-page="friends">
+                        <i class="fas fa-user-friends"></i>
+                    </div>
+                    <div class="nav-icon" data-page="watch">
+                        <i class="fas fa-tv"></i>
+                    </div>
+                    <div class="nav-icon" data-page="groups">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="nav-icon" data-page="notifications">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <div class="user-avatar" id="headerAvatar"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Main Content -->
     <div class="container">
-        <header>
-            <div class="logo" id="homeButton">
-                <i class="fas fa-camera"></i>
-                <span>OpenGram</span>
-            </div>
-            <div class="search-container">
-                <i class="fas fa-search"></i>
-                <input type="text" id="searchInput" placeholder="Поиск по ID поста (например: #OPG-829375)">
-            </div>
-            <div class="nav-icons">
-                <div class="icon" id="homeNavButton"><i class="fas fa-home"></i></div>
-                <div class="icon" id="messageButton"><i class="fas fa-paper-plane"></i></div>
-                <div class="icon" id="createButton"><i class="fas fa-plus-square"></i></div>
-                <div class="icon" id="notificationsButton"><i class="fas fa-heart"></i></div>
-                <div class="icon" id="profileButton"><i class="fas fa-user"></i></div>
-            </div>
-        </header>
-
-        <div class="device-section">
-            <div class="device-title">
-                <i class="fas fa-mobile-alt"></i>
-                <span>Межплатформенная синхронизация</span>
-            </div>
-            <div class="device-buttons">
-                <div class="device-btn active" id="thisDeviceBtn">Это устройство</div>
-                <div class="device-btn" id="otherDeviceBtn">Другое устройство</div>
-            </div>
-            <div class="device-info">
-                <p>Все посты сохраняются на сервере и доступны с любого устройства.</p>
-                <p>Нажмите кнопку "Синхронизировать", чтобы обновить ленту и получить новые посты с сервера.</p>
-                <button class="sync-button" id="syncButton">
-                    <i class="fas fa-sync-alt"></i>
-                    Синхронизировать
-                </button>
-                <div class="sync-info">
-                    <i class="fas fa-sync-alt"></i>
-                    <span id="syncStatus">Синхронизировано с сервером</span>
+        <div class="main-content" id="mainContent" class="hidden">
+            <!-- Left Sidebar -->
+            <div class="left-sidebar">
+                <div class="sidebar-card">
+                    <div class="user-info">
+                        <div class="avatar" id="sidebarAvatar"></div>
+                        <div class="name" id="sidebarName">Иван Иванов</div>
+                    </div>
+                    
+                    <ul class="sidebar-menu">
+                        <li class="active" data-page="home">
+                            <i class="fas fa-user-friends"></i>
+                            <span>Новости</span>
+                        </li>
+                        <li data-page="friends">
+                            <i class="fas fa-user-friends"></i>
+                            <span>Друзья</span>
+                        </li>
+                        <li data-page="watch">
+                            <i class="fas fa-play-circle"></i>
+                            <span>Watch</span>
+                        </li>
+                        <li data-page="groups">
+                            <i class="fas fa-users"></i>
+                            <span>Группы</span>
+                        </li>
+                        <li data-page="events">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>События</span>
+                        </li>
+                        <li data-page="memories">
+                            <i class="fas fa-history"></i>
+                            <span>Воспоминания</span>
+                        </li>
+                        <li data-page="saved">
+                            <i class="fas fa-bookmark"></i>
+                            <span>Сохраненное</span>
+                        </li>
+                        <li id="editProfileBtn">
+                            <i class="fas fa-edit"></i>
+                            <span>Редактировать профиль</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="sidebar-card shortcuts">
+                    <h3>Ваши ярлыки</h3>
+                    <ul class="sidebar-menu">
+                        <li>
+                            <i class="fas fa-code" style="color: #1877f2;"></i>
+                            <span>Разработчики FaceXI</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-graduation-cap" style="color: #f02849;"></i>
+                            <span>Учебная группа</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-gamepad" style="color: #45bd62;"></i>
+                            <span>Игровые новости</span>
+                        </li>
+                    </ul>
                 </div>
             </div>
-        </div>
-
-        <div class="stories">
-            <div class="story">
-                <div class="story-avatar">
-                    <div class="story-avatar-inner">М</div>
-                </div>
-                <div class="story-username">Мария</div>
-            </div>
-            <div class="story">
-                <div class="story-avatar">
-                    <div class="story-avatar-inner">П</div>
-                </div>
-                <div class="story-username">Павел</div>
-            </div>
-            <div class="story">
-                <div class="story-avatar">
-                    <div class="story-avatar-inner">А</div>
-                </div>
-                <div class="story-username">Андрей</div>
-            </div>
-            <div class="story">
-                <div class="story-avatar">
-                    <div class="story-avatar-inner">К</div>
-                </div>
-                <div class="story-username">Карина</div>
-            </div>
-            <div class="story">
-                <div class="story-avatar">
-                    <div class="story-avatar-inner">Д</div>
-                </div>
-                <div class="story-username">Дмитрий</div>
-            </div>
-        </div>
-
-        <div class="main-content">
-            <div class="posts-section">
+            
+            <!-- Feed -->
+            <div class="feed">
+                <!-- Create Post -->
                 <div class="create-post">
-                    <textarea placeholder="Что у вас нового?" id="postTextarea"></textarea>
-                    <div class="post-options">
-                        <div class="post-option" id="addPhotoOption"><i class="fas fa-image"></i> Фото</div>
-                        <div class="post-option" id="addVideoOption"><i class="fas fa-video"></i> Видео</div>
-                        <div class="post-option" id="addShortsOption"><i class="fas fa-film"></i> Shorts</div>
+                    <div class="post-input">
+                        <div class="avatar" id="postInputAvatar"></div>
+                        <input type="text" placeholder="Что у вас нового?" id="openPostModal">
                     </div>
-                    <button class="publish-btn" id="publishButton">Опубликовать</button>
-                    <div class="post-id">ID поста: #OPG-<span id="generatedId">829375</span> (скопируйте этот ID для поиска)</div>
+                    
+                    <div class="post-actions">
+                        <div class="post-action photo-video" id="openPostModal2">
+                            <i class="fas fa-photo-video"></i>
+                            <span>Фото/Видео</span>
+                        </div>
+                        <div class="post-action feeling" id="openFeelingModal">
+                            <i class="fas fa-laugh-beam"></i>
+                            <span>Чувства/действия</span>
+                        </div>
+                    </div>
                 </div>
-
-                <div class="posts" id="postsContainer">
-                    <!-- Посты будут добавляться здесь -->
+                
+                <!-- Stories -->
+                <div class="stories" id="storiesContainer">
+                    <div class="story" id="createStoryBtn">
+                        <div class="story-bg" style="background-color: #f0f2f5;"></div>
+                        <div class="create-story">
+                            <div class="plus">
+                                <i class="fas fa-plus"></i>
+                            </div>
+                            <div class="text">Создать историю</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Stories will be loaded here -->
                 </div>
-
-                <div class="search-results hidden" id="searchResults">
-                    <h3>Результаты поиска</h3>
-                    <div id="searchResultsContainer"></div>
-                    <div class="search-help">Используйте формат #ID (например: #OPG-829375) для поиска постов</div>
+                
+                <!-- Posts -->
+                <div id="postsContainer">
+                    <!-- Posts will be loaded here -->
                 </div>
             </div>
-
-            <div class="sidebar">
-                <div class="profile-card">
-                    <div class="profile-avatar">В</div>
-                    <div class="profile-info">
-                        <div class="profile-name">Ваше имя</div>
-                        <div class="profile-bio">Добро пожаловать в OpenGram! Здесь вы можете делиться моментами своей жизни.</div>
+            
+            <!-- Right Sidebar -->
+            <div class="right-sidebar">
+                <div class="sidebar-card contacts">
+                    <h3>Контакты</h3>
+                    
+                    <div class="contact">
+                        <div class="avatar" style="background-image: url('https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60');"></div>
+                        <div class="name">Мария Семенова</div>
                     </div>
-                    <div class="profile-stats">
-                        <div class="stat">
-                            <div class="stat-value" id="postsCount">7</div>
-                            <div class="stat-label">публикаций</div>
-                        </div>
-                        <div class="stat">
-                            <div class="stat-value">347</div>
-                            <div class="stat-label">подписчиков</div>
-                        </div>
-                        <div class="stat">
-                            <div class="stat-value">189</div>
-                            <div class="stat-label">подписок</div>
-                        </div>
+                    
+                    <div class="contact">
+                        <div class="avatar" style="background-image: url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60');"></div>
+                        <div class="name">Андрей Петров</div>
                     </div>
-                    <button class="edit-profile-btn">Редактировать профиль</button>
+                    
+                    <div class="contact">
+                        <div class="avatar" style="background-image: url('https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60');"></div>
+                        <div class="name">Ольга Козлова</div>
+                    </div>
+                    
+                    <div class="contact">
+                        <div class="avatar" style="background-image: url('https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60');"></div>
+                        <div class="name">Дмитрий Иванов</div>
+                    </div>
+                    
+                    <div class="contact">
+                        <div class="avatar" style="background-image: url('https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60');"></div>
+                        <div class="name">Елена Смирнова</div>
+                    </div>
                 </div>
-
-                <div class="suggestions">
-                    <div class="suggestion-title">Предложения для вас</div>
-                    <div class="suggestion-item">
-                        <div class="suggestion-user">
-                            <div class="avatar">А</div>
-                            <div>
-                                <div style="font-weight: bold;">Андрей</div>
-                                <div style="font-size: 12px; color: #8e8e8e;">В друзьях у Марии</div>
-                            </div>
-                        </div>
-                        <div class="follow-btn">Подписаться</div>
+                
+                <div class="sidebar-card">
+                    <h3>Группы FaceXI</h3>
+                    
+                    <div class="contact">
+                        <div class="avatar" style="background-color: #f7b928;">Т</div>
+                        <div class="name">Путешествия по миру</div>
                     </div>
-                    <div class="suggestion-item">
-                        <div class="suggestion-user">
-                            <div class="avatar">К</div>
-                            <div>
-                                <div style="font-weight: bold;">Карина</div>
-                                <div style="font-size: 12px; color: #8e8e8e;">Популярный блогер</div>
-                            </div>
-                        </div>
-                        <div class="follow-btn">Подписаться</div>
+                    
+                    <div class="contact">
+                        <div class="avatar" style="background-color: #45bd62;">Ф</div>
+                        <div class="name">Фотография</div>
                     </div>
-                    <div class="suggestion-item">
-                        <div class="suggestion-user">
-                            <div class="avatar">Д</div>
-                            <div>
-                                <div style="font-weight: bold;">Дмитрий</div>
-                                <div style="font-size: 12px; color: #8e8e8e;">В друзьях у Павла</div>
-                            </div>
-                        </div>
-                        <div class="follow-btn">Подписаться</div>
+                    
+                    <div class="contact">
+                        <div class="avatar" style="background-color: #1877f2;">П</div>
+                        <div class="name">Программирование</div>
                     </div>
                 </div>
             </div>
@@ -845,470 +1261,496 @@
     </div>
 
     <script>
-        // Эмуляция базы данных на сервере (localStorage)
-        function getServerDatabase() {
-            const serverData = localStorage.getItem('openGramServer');
-            return serverData ? JSON.parse(serverData) : {
-                posts: [
-                    {
-                        id: "OPG-829375",
-                        username: "Мария",
-                        avatar: "М",
-                        content: "photo",
-                        image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80",
-                        likes: 245,
-                        caption: "Отличный день на пляже! ☀️ #отдых #море",
-                        comments: [
-                            {user: "Андрей", text: "Отлично выглядишь!"},
-                            {user: "Карина", text: "Классное фото!"}
-                        ]
-                    },
-                    {
-                        id: "OPG-472196",
-                        username: "Павел",
-                        avatar: "П",
-                        content: "photo",
-                        image: "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80",
-                        likes: 189,
-                        caption: "Новый трек в студии! 🎸 #музыка #живаямузыка",
-                        comments: [
-                            {user: "Дмитрий", text: "Было круто!"},
-                            {user: "Мария", text: "Жду следующего концерта!"}
-                        ]
-                    },
-                    {
-                        id: "OPG-135790",
-                        username: "Андрей",
-                        avatar: "А",
-                        content: "photo",
-                        image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80",
-                        likes: 312,
-                        caption: "Восхождение на вершину! 🏔️ #горы #природа",
-                        comments: [
-                            {user: "Павел", text: "Крутой вид!"},
-                            {user: "Дмитрий", text: "Как там наверху?"}
-                        ]
-                    }
-                ],
-                users: []
-            };
-        }
-
-        function saveToServer(data) {
-            localStorage.setItem('openGramServer', JSON.stringify(data));
-        }
-
-        // Логика для модального окна авторизации
+        // Данные приложения
+        let currentUser = null;
+        let users = JSON.parse(localStorage.getItem('facexi_users')) || [];
+        let posts = JSON.parse(localStorage.getItem('facexi_posts')) || [];
+        let stories = JSON.parse(localStorage.getItem('facexi_stories')) || [];
+        
+        // DOM элементы
+        const authModal = document.getElementById('authModal');
+        const profileModal = document.getElementById('profileModal');
+        const storyModal = document.getElementById('storyModal');
+        const postModal = document.getElementById('postModal');
+        const mainHeader = document.getElementById('mainHeader');
+        const mainContent = document.getElementById('mainContent');
+        const postsContainer = document.getElementById('postsContainer');
+        const storiesContainer = document.getElementById('storiesContainer');
+        
+        // Инициализация приложения
         document.addEventListener('DOMContentLoaded', function() {
-            const authModal = document.getElementById('authModal');
-            const profileIcon = document.getElementById('profileButton');
-            const loginTab = document.getElementById('loginTab');
-            const registerTab = document.getElementById('registerTab');
-            const smsCodeContainer = document.getElementById('smsCodeContainer');
-            const smsNotice = document.getElementById('smsNotice');
-            const authButton = document.getElementById('authButton');
-            const phoneInput = document.getElementById('phoneInput');
-            const searchInput = document.getElementById('searchInput');
-            const postsContainer = document.getElementById('postsContainer');
-            const searchResults = document.getElementById('searchResults');
-            const searchResultsContainer = document.getElementById('searchResultsContainer');
-            const notification = document.getElementById('notification');
-            const publishButton = document.getElementById('publishButton');
-            const homeButton = document.getElementById('homeButton');
-            const homeNavButton = document.getElementById('homeNavButton');
-            const messageButton = document.getElementById('messageButton');
-            const notificationsButton = document.getElementById('notificationsButton');
-            const postTextarea = document.getElementById('postTextarea');
-            const thisDeviceBtn = document.getElementById('thisDeviceBtn');
-            const otherDeviceBtn = document.getElementById('otherDeviceBtn');
-            const syncStatus = document.getElementById('syncStatus');
-            const postsCount = document.getElementById('postsCount');
-            const generatedId = document.getElementById('generatedId');
-            const syncButton = document.getElementById('syncButton');
+            // Проверяем, есть ли активный пользователь
+            const savedUser = localStorage.getItem('facexi_current_user');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                showMainApp();
+            } else {
+                showAuthModal();
+            }
             
-            let currentView = 'thisDevice';
-            let serverData = getServerDatabase();
-            
-            // Показываем модальное окно при загрузке (эмуляция неавторизованного пользователя)
+            // Инициализация обработчиков событий
+            initEventListeners();
+            loadPosts();
+            loadStories();
+        });
+        
+        // Показать модальное окно авторизации
+        function showAuthModal() {
             authModal.style.display = 'flex';
+            mainHeader.classList.add('hidden');
+            mainContent.classList.add('hidden');
+        }
+        
+        // Показать основное приложение
+        function showMainApp() {
+            authModal.style.display = 'none';
+            mainHeader.classList.remove('hidden');
+            mainContent.classList.remove('hidden');
+            updateUserInterface();
+        }
+        
+        // Обновление интерфейса пользователя
+        function updateUserInterface() {
+            if (!currentUser) return;
             
-            // Заполняем ленту постами
-            renderPosts(serverData.posts);
-            updatePostsCount();
-            
-            // Генерируем случайный ID для нового поста
-            generatedId.textContent = Math.floor(100000 + Math.random() * 900000);
-            
-            profileIcon.addEventListener('click', function() {
-                authModal.style.display = 'flex';
-            });
-            
-            loginTab.addEventListener('click', function() {
-                loginTab.classList.add('active');
-                registerTab.classList.remove('active');
-                smsNotice.textContent = 'Мы отправим SMS с кодом подтверждения на ваш номер';
-            });
-            
-            registerTab.addEventListener('click', function() {
-                registerTab.classList.add('active');
-                loginTab.classList.remove('active');
-                smsNotice.textContent = 'Мы отправим SMS с кодом подтверждения для регистрации';
-            });
-            
-            authButton.addEventListener('click', function() {
-                if (!smsCodeContainer.style.display || smsCodeContainer.style.display === 'none') {
-                    // Эмулируем отправку SMS кода
-                    const phone = phoneInput.value;
-                    if (phone) {
-                        smsCodeContainer.style.display = 'block';
-                        authButton.textContent = 'Подтвердить';
-                        smsNotice.textContent = 'Код отправлен на номер ' + phone;
-                    } else {
-                        showNotification('Введите номер телефона', 'error');
-                    }
+            // Обновление аватаров
+            const avatars = document.querySelectorAll('.avatar, .user-avatar');
+            avatars.forEach(avatar => {
+                if (currentUser.avatar) {
+                    avatar.style.backgroundImage = `url(${currentUser.avatar})`;
+                    avatar.textContent = '';
                 } else {
-                    // Эмулируем проверку кода и вход
-                    const smsCode = document.getElementById('smsCodeInput').value;
-                    if (smsCode === '1234') { // Простой код для демонстрации
-                        showNotification('Вход выполнен успешно!');
-                        authModal.style.display = 'none';
-                    } else {
-                        showNotification('Неверный код подтверждения', 'error');
-                    }
+                    avatar.style.backgroundImage = '';
+                    avatar.textContent = currentUser.name.split(' ').map(n => n[0]).join('');
                 }
             });
             
-            // Переключение между устройствами
-            thisDeviceBtn.addEventListener('click', function() {
-                thisDeviceBtn.classList.add('active');
-                otherDeviceBtn.classList.remove('active');
-                currentView = 'thisDevice';
-                syncStatus.textContent = 'Синхронизировано с сервером';
-                renderPosts(serverData.posts);
-                showNotification('Режим: это устройство');
+            // Обновление имени
+            const nameElements = document.querySelectorAll('.name, #sidebarName');
+            nameElements.forEach(element => {
+                element.textContent = currentUser.name;
+            });
+        }
+        
+        // Инициализация обработчиков событий
+        function initEventListeners() {
+            // Авторизация
+            document.getElementById('closeAuth').addEventListener('click', () => {
+                if (!currentUser) return;
+                authModal.style.display = 'none';
             });
             
-            otherDeviceBtn.addEventListener('click', function() {
-                otherDeviceBtn.classList.add('active');
-                thisDeviceBtn.classList.remove('active');
-                currentView = 'otherDevice';
-                syncStatus.textContent = 'Загрузка постов с сервера...';
-                
-                // Эмуляция загрузки данных с сервера
-                setTimeout(() => {
-                    syncStatus.textContent = 'Синхронизировано с сервером';
-                    renderPosts(serverData.posts);
-                    showNotification('Режим: другое устройство. Посты загружены с сервера.');
-                }, 1000);
-            });
-            
-            // Кнопка синхронизации
-            syncButton.addEventListener('click', function() {
-                syncStatus.textContent = 'Синхронизация...';
-                syncButton.disabled = true;
-                
-                // Эмуляция задержки синхронизации
-                setTimeout(() => {
-                    // Загружаем свежие данные с сервера
-                    serverData = getServerDatabase();
-                    renderPosts(serverData.posts);
-                    updatePostsCount();
+            // Переключение между вкладками авторизации
+            document.querySelectorAll('.auth-tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
                     
-                    syncStatus.textContent = 'Синхронизировано с сервером';
-                    syncButton.disabled = false;
-                    showNotification('Все посты синхронизированы!');
-                }, 1500);
+                    this.classList.add('active');
+                    document.getElementById(this.dataset.tab + 'Form').classList.add('active');
+                });
             });
             
-            // Поиск по ID
-            searchInput.addEventListener('keyup', function(e) {
-                if (e.key === 'Enter') {
-                    const searchTerm = searchInput.value.trim();
+            // Форма входа
+            document.getElementById('loginForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const email = document.getElementById('loginEmail').value;
+                const password = document.getElementById('loginPassword').value;
+                
+                const user = users.find(u => u.email === email && u.password === password);
+                if (user) {
+                    currentUser = user;
+                    localStorage.setItem('facexi_current_user', JSON.stringify(currentUser));
+                    showMainApp();
+                } else {
+                    alert('Неверный email или пароль');
+                }
+            });
+            
+            // Форма регистрации
+            document.getElementById('registerForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const name = document.getElementById('registerName').value;
+                const email = document.getElementById('registerEmail').value;
+                const password = document.getElementById('registerPassword').value;
+                const birthday = document.getElementById('registerBirthday').value;
+                const gender = document.getElementById('registerGender').value;
+                
+                // Проверяем, есть ли уже пользователь с таким email
+                if (users.find(u => u.email === email)) {
+                    alert('Пользователь с таким email уже существует');
+                    return;
+                }
+                
+                const newUser = {
+                    id: Date.now(),
+                    name,
+                    email,
+                    password,
+                    birthday,
+                    gender,
+                    avatar: null,
+                    bio: '',
+                    location: ''
+                };
+                
+                users.push(newUser);
+                localStorage.setItem('facexi_users', JSON.stringify(users));
+                
+                currentUser = newUser;
+                localStorage.setItem('facexi_current_user', JSON.stringify(currentUser));
+                
+                showMainApp();
+            });
+            
+            // Профиль
+            document.getElementById('editProfileBtn').addEventListener('click', () => {
+                document.getElementById('profileName').value = currentUser.name;
+                document.getElementById('profileBio').value = currentUser.bio || '';
+                document.getElementById('profileLocation').value = currentUser.location || '';
+                
+                const avatarPreview = document.getElementById('profileAvatarPreview');
+                if (currentUser.avatar) {
+                    avatarPreview.style.backgroundImage = `url(${currentUser.avatar})`;
+                    avatarPreview.textContent = '';
+                } else {
+                    avatarPreview.style.backgroundImage = '';
+                    avatarPreview.textContent = currentUser.name.split(' ').map(n => n[0]).join('');
+                }
+                
+                profileModal.style.display = 'flex';
+            });
+            
+            document.getElementById('closeProfile').addEventListener('click', () => {
+                profileModal.style.display = 'none';
+            });
+            
+            document.getElementById('changeAvatar').addEventListener('click', () => {
+                document.getElementById('avatarUpload').click();
+            });
+            
+            document.getElementById('avatarUpload').addEventListener('change', function(e) {
+                if (e.target.files && e.target.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        currentUser.avatar = event.target.result;
+                        document.getElementById('profileAvatarPreview').style.backgroundImage = `url(${event.target.result})`;
+                        document.getElementById('profileAvatarPreview').textContent = '';
+                        updateUserInterface();
+                    };
+                    reader.readAsDataURL(e.target.files[0]);
+                }
+            });
+            
+            document.getElementById('saveProfile').addEventListener('click', () => {
+                currentUser.name = document.getElementById('profileName').value;
+                currentUser.bio = document.getElementById('profileBio').value;
+                currentUser.location = document.getElementById('profileLocation').value;
+                
+                // Обновляем пользователя в массиве users
+                const userIndex = users.findIndex(u => u.id === currentUser.id);
+                if (userIndex !== -1) {
+                    users[userIndex] = currentUser;
+                    localStorage.setItem('facexi_users', JSON.stringify(users));
+                }
+                
+                localStorage.setItem('facexi_current_user', JSON.stringify(currentUser));
+                updateUserInterface();
+                profileModal.style.display = 'none';
+            });
+            
+            // Создание истории
+            document.getElementById('createStoryBtn').addEventListener('click', () => {
+                storyModal.style.display = 'flex';
+            });
+            
+            document.getElementById('closeStory').addEventListener('click', () => {
+                storyModal.style.display = 'none';
+            });
+            
+            document.getElementById('uploadStoryBtn').addEventListener('click', () => {
+                document.getElementById('storyUpload').click();
+            });
+            
+            document.getElementById('storyUpload').addEventListener('change', function(e) {
+                if (e.target.files && e.target.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        document.getElementById('storyPreview').style.backgroundImage = `url(${event.target.result})`;
+                        document.getElementById('storyPreview').textContent = '';
+                    };
+                    reader.readAsDataURL(e.target.files[0]);
+                }
+            });
+            
+            document.getElementById('publishStoryBtn').addEventListener('click', () => {
+                const storyPreview = document.getElementById('storyPreview');
+                const backgroundImage = storyPreview.style.backgroundImage;
+                
+                if (backgroundImage && backgroundImage !== 'none') {
+                    const newStory = {
+                        id: Date.now(),
+                        userId: currentUser.id,
+                        userName: currentUser.name,
+                        userAvatar: currentUser.avatar,
+                        image: backgroundImage.slice(5, -2), // Извлекаем URL из backgroundImage
+                        timestamp: new Date().toISOString()
+                    };
                     
-                    if (searchTerm.startsWith('#')) {
-                        // Поиск по ID поста
-                        const postId = searchTerm.substring(1);
-                        const foundPost = serverData.posts.find(post => post.id === postId);
-                        
-                        if (foundPost) {
-                            postsContainer.classList.add('hidden');
-                            searchResults.classList.remove('hidden');
-                            searchResultsContainer.innerHTML = '';
-                            
-                            const postElement = createPostElement(foundPost);
-                            searchResultsContainer.appendChild(postElement);
-                            
-                            showNotification('Пост найден!');
-                        } else {
-                            showNotification('Пост с таким ID не найден', 'error');
-                            searchResultsContainer.innerHTML = `
-                                <div class="no-posts">
-                                    <i class="fas fa-search"></i>
-                                    <p>Пост с ID ${searchTerm} не найден</p>
-                                    <p>Попробуйте один из этих ID:</p>
-                                    <p>#OPG-829375, #OPG-472196, #OPG-135790</p>
-                                </div>
-                            `;
-                        }
-                    } else if (searchTerm !== '') {
-                        // Поиск по имени пользователя
-                        const userPosts = serverData.posts.filter(post => 
-                            post.username.toLowerCase().includes(searchTerm.toLowerCase())
-                        );
-                        
-                        if (userPosts.length > 0) {
-                            postsContainer.classList.add('hidden');
-                            searchResults.classList.remove('hidden');
-                            searchResultsContainer.innerHTML = '<h4>Посты пользователя ' + searchTerm + '</h4>';
-                            
-                            userPosts.forEach(post => {
-                                const postElement = createPostElement(post);
-                                searchResultsContainer.appendChild(postElement);
-                            });
-                            
-                            showNotification('Найдено ' + userPosts.length + ' постов');
-                        } else {
-                            showNotification('Пользователь не найден', 'error');
-                            searchResultsContainer.innerHTML = `
-                                <div class="no-posts">
-                                    <i class="fas fa-search"></i>
-                                    <p>Пользователь "${searchTerm}" не найден</p>
-                                    <p>Попробуйте найти по ID поста, используя #</p>
-                                </div>
-                            `;
-                        }
-                    } else {
-                        postsContainer.classList.remove('hidden');
-                        searchResults.classList.add('hidden');
-                    }
+                    stories.unshift(newStory);
+                    localStorage.setItem('facexi_stories', JSON.stringify(stories));
+                    loadStories();
+                    storyModal.style.display = 'none';
+                    
+                    // Сброс превью
+                    storyPreview.style.backgroundImage = 'none';
+                    storyPreview.textContent = 'Ваша история будет здесь';
+                } else {
+                    alert('Пожалуйста, загрузите изображение для истории');
                 }
             });
             
             // Создание поста
-            publishButton.addEventListener('click', function() {
-                if (postTextarea.value.trim() === '') {
-                    showNotification('Добавьте текст к публикации', 'error');
+            document.getElementById('openPostModal').addEventListener('click', () => {
+                postModal.style.display = 'flex';
+            });
+            
+            document.getElementById('openPostModal2').addEventListener('click', () => {
+                postModal.style.display = 'flex';
+            });
+            
+            document.getElementById('closePost').addEventListener('click', () => {
+                postModal.style.display = 'none';
+            });
+            
+            document.getElementById('uploadPostImageBtn').addEventListener('click', () => {
+                document.getElementById('postUpload').click();
+            });
+            
+            document.getElementById('postUpload').addEventListener('change', function(e) {
+                if (e.target.files && e.target.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        document.getElementById('postPreview').src = event.target.result;
+                        document.getElementById('postPreview').style.display = 'block';
+                    };
+                    reader.readAsDataURL(e.target.files[0]);
+                }
+            });
+            
+            document.getElementById('publishPostBtn').addEventListener('click', () => {
+                const postText = document.getElementById('postText').value;
+                const postImage = document.getElementById('postPreview').src;
+                
+                if (postText.trim() === '' && postImage === '') {
+                    alert('Пожалуйста, добавьте текст или изображение к посту');
                     return;
                 }
                 
-                // Создаем новый пост
                 const newPost = {
-                    id: "OPG-" + generatedId.textContent,
-                    username: "Ваше имя",
-                    avatar: "В",
-                    content: "photo",
-                    image: "https://images.unsplash.com/photo-1518791841217-8f162f1e1131?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80",
-                    likes: 0,
-                    caption: postTextarea.value,
-                    comments: []
+                    id: Date.now(),
+                    userId: currentUser.id,
+                    userName: currentUser.name,
+                    userAvatar: currentUser.avatar,
+                    text: postText,
+                    image: postImage !== '' ? postImage : null,
+                    likes: [],
+                    comments: [],
+                    timestamp: new Date().toISOString()
                 };
                 
-                // Добавляем пост в базу данных на "сервере"
-                serverData.posts.unshift(newPost);
-                saveToServer(serverData);
+                posts.unshift(newPost);
+                localStorage.setItem('facexi_posts', JSON.stringify(posts));
+                loadPosts();
+                postModal.style.display = 'none';
                 
-                // Обновляем ленту
-                renderPosts(serverData.posts);
-                updatePostsCount();
-                
-                // Генерируем новый ID для следующего поста
-                generatedId.textContent = Math.floor(100000 + Math.random() * 900000);
-                
-                showNotification('Публикация успешно создана! ID: ' + newPost.id);
-                postTextarea.value = '';
+                // Сброс формы
+                document.getElementById('postText').value = '';
+                document.getElementById('postPreview').src = '';
+                document.getElementById('postPreview').style.display = 'none';
             });
             
             // Навигация
-            homeButton.addEventListener('click', function() {
-                postsContainer.classList.remove('hidden');
-                searchResults.classList.add('hidden');
-                searchInput.value = '';
-                showNotification('Главная страница');
-            });
-            
-            homeNavButton.addEventListener('click', function() {
-                postsContainer.classList.remove('hidden');
-                searchResults.classList.add('hidden');
-                searchInput.value = '';
-                showNotification('Главная страница');
-            });
-            
-            messageButton.addEventListener('click', function() {
-                showNotification('Раздел сообщений');
-            });
-            
-            notificationsButton.addEventListener('click', function() {
-                showNotification('Уведомления');
-            });
-            
-            // Функция отображения уведомлений
-            function showNotification(message, type = 'success') {
-                notification.textContent = message;
-                notification.className = type === 'success' ? 'notification' : 'notification error';
-                notification.style.display = 'block';
-                
-                setTimeout(() => {
-                    notification.style.display = 'none';
-                }, 3000);
-            }
-            
-            // Функция обновления счетчика постов
-            function updatePostsCount() {
-                postsCount.textContent = serverData.posts.filter(post => post.username === "Ваше имя").length;
-            }
-            
-            // Функция отрисовки постов
-            function renderPosts(posts) {
-                postsContainer.innerHTML = '';
-                
-                if (posts.length === 0) {
-                    postsContainer.innerHTML = `
-                        <div class="no-posts">
-                            <i class="fas fa-camera"></i>
-                            <p>Пока нет публикаций</p>
-                            <p>Создайте первую публикацию!</p>
-                        </div>
-                    `;
-                    return;
+            document.querySelectorAll('.nav-icon, .sidebar-menu li').forEach(element => {
+                if (element.dataset.page) {
+                    element.addEventListener('click', function() {
+                        // Убираем активный класс у всех элементов
+                        document.querySelectorAll('.nav-icon').forEach(icon => icon.classList.remove('active'));
+                        document.querySelectorAll('.sidebar-menu li').forEach(li => li.classList.remove('active'));
+                        
+                        // Добавляем активный класс к текущему элементу
+                        this.classList.add('active');
+                        
+                        // Здесь можно добавить логику для переключения страниц
+                        // В этом примере мы просто показываем уведомление
+                        if (this.dataset.page !== 'home') {
+                            alert(`Раздел "${this.dataset.page}" находится в разработке`);
+                        }
+                    });
                 }
-                
-                posts.forEach(post => {
-                    const postElement = createPostElement(post);
-                    postsContainer.appendChild(postElement);
-                });
+            });
+        }
+        
+        // Загрузка постов
+        function loadPosts() {
+            postsContainer.innerHTML = '';
+            
+            if (posts.length === 0) {
+                postsContainer.innerHTML = '<div class="post"><div class="post-content"><p>Пока нет постов. Будьте первым, кто поделится чем-то интересным!</p></div></div>';
+                return;
             }
             
-            // Функция создания элемента поста
-            function createPostElement(post) {
+            posts.forEach(post => {
                 const postElement = document.createElement('div');
                 postElement.className = 'post';
-                postElement.dataset.id = post.id;
-                
-                let contentHTML = '';
-                if (post.content === 'photo') {
-                    contentHTML = `<img src="${post.image}" alt="Post image" class="post-image">`;
-                }
-                
                 postElement.innerHTML = `
                     <div class="post-header">
-                        <div class="avatar">${post.avatar}</div>
-                        <div>${post.username}</div>
-                    </div>
-                    <div class="post-content">
-                        ${contentHTML}
-                    </div>
-                    <div class="post-actions">
-                        <div class="action-buttons">
-                            <span class="icon like-button"><i class="far fa-heart"></i></span>
-                            <span class="icon comment-button"><i class="far fa-comment"></i></span>
-                            <span class="icon share-button"><i class="far fa-paper-plane"></i></span>
+                        <div class="avatar" style="${post.userAvatar ? `background-image: url(${post.userAvatar})` : ''}">${!post.userAvatar ? post.userName.split(' ').map(n => n[0]).join('') : ''}</div>
+                        <div class="post-user">
+                            <div class="name">${post.userName}</div>
+                            <div class="time">
+                                ${formatTime(post.timestamp)} <i class="fas fa-globe-americas"></i>
+                            </div>
                         </div>
-                        <div class="icon save-button"><i class="far fa-bookmark"></i></div>
+                        <div class="nav-icon">
+                            <i class="fas fa-ellipsis-h"></i>
+                        </div>
                     </div>
-                    <div class="post-likes">Нравится: <span class="likes-count">${post.likes}</span></div>
-                    <div class="post-caption">
-                        <strong>${post.username}</strong> ${post.caption}
+                    
+                    <div class="post-content">
+                        <div class="post-text">${post.text}</div>
+                        ${post.image ? `<img src="${post.image}" alt="Post image" class="post-image">` : ''}
                     </div>
-                    <div class="post-comments">
+                    
+                    <div class="post-stats">
+                        <div class="likes">
+                            <i class="fas fa-thumbs-up"></i> ${post.likes.length}
+                        </div>
+                        <div class="comments-share">
+                            ${post.comments.length} комментария
+                        </div>
+                    </div>
+                    
+                    <div class="post-actions-row">
+                        <div class="post-action-btn ${post.likes.includes(currentUser.id) ? 'active' : ''}" data-post-id="${post.id}">
+                            <i class="${post.likes.includes(currentUser.id) ? 'fas' : 'far'} fa-thumbs-up"></i>
+                            <span>Нравится</span>
+                        </div>
+                        <div class="post-action-btn" data-post-id="${post.id}">
+                            <i class="far fa-comment"></i>
+                            <span>Комментировать</span>
+                        </div>
+                        <div class="post-action-btn" data-post-id="${post.id}">
+                            <i class="far fa-share-square"></i>
+                            <span>Поделиться</span>
+                        </div>
+                    </div>
+                    
+                    <div class="comments">
                         ${post.comments.map(comment => `
                             <div class="comment">
-                                <div class="comment-avatar">${comment.user.charAt(0)}</div>
+                                <div class="avatar" style="${comment.userAvatar ? `background-image: url(${comment.userAvatar})` : ''}">${!comment.userAvatar ? comment.userName.split(' ').map(n => n[0]).join('') : ''}</div>
                                 <div class="comment-content">
-                                    <span class="comment-author">${comment.user}</span> ${comment.text}
+                                    <div class="name">${comment.userName}</div>
+                                    <div class="text">${comment.text}</div>
+                                    <div class="comment-actions">
+                                        <span class="comment-action">Нравится</span>
+                                        <span class="comment-action">Ответить</span>
+                                        <span class="comment-action">${formatTime(comment.timestamp)}</span>
+                                    </div>
                                 </div>
                             </div>
                         `).join('')}
+                        
                         <div class="add-comment">
-                            <input type="text" placeholder="Добавьте комментарий...">
+                            <div class="avatar" style="${currentUser.avatar ? `background-image: url(${currentUser.avatar})` : ''}">${!currentUser.avatar ? currentUser.name.split(' ').map(n => n[0]).join('') : ''}</div>
+                            <input type="text" placeholder="Напишите комментарий..." data-post-id="${post.id}">
                         </div>
                     </div>
-                    <div class="post-id">ID поста: ${post.id}</div>
                 `;
                 
-                // Добавляем обработчик лайков
-                const likeButton = postElement.querySelector('.like-button');
-                const likesCount = postElement.querySelector('.likes-count');
-                
-                likeButton.addEventListener('click', function() {
-                    const icon = likeButton.querySelector('i');
-                    
-                    if (icon.classList.contains('far')) {
-                        icon.classList.remove('far');
-                        icon.classList.add('fas', 'active-like');
-                        likesCount.textContent = parseInt(likesCount.textContent) + 1;
-                        showNotification('Лайк добавлен!');
-                    } else {
-                        icon.classList.remove('fas', 'active-like');
-                        icon.classList.add('far');
-                        likesCount.textContent = parseInt(likesCount.textContent) - 1;
-                        showNotification('Лайк удален');
-                    }
-                });
-                
-                // Обработчики для других кнопок
-                const commentButton = postElement.querySelector('.comment-button');
-                const shareButton = postElement.querySelector('.share-button');
-                const saveButton = postElement.querySelector('.save-button');
-                const commentInput = postElement.querySelector('.add-comment input');
-                
-                commentButton.addEventListener('click', function() {
-                    commentInput.focus();
-                    showNotification('Оставьте комментарий');
-                });
-                
-                shareButton.addEventListener('click', function() {
-                    showNotification('Поделиться постом: ' + post.id);
-                });
-                
-                saveButton.addEventListener('click', function() {
-                    const icon = saveButton.querySelector('i');
-                    
-                    if (icon.classList.contains('far')) {
-                        icon.classList.remove('far');
-                        icon.classList.add('fas');
-                        showNotification('Пост сохранен');
-                    } else {
-                        icon.classList.remove('fas');
-                        icon.classList.add('far');
-                        showNotification('Пост удален из сохраненных');
-                    }
-                });
-                
-                commentInput.addEventListener('keyup', function(e) {
-                    if (e.key === 'Enter') {
-                        if (commentInput.value.trim() !== '') {
-                            showNotification('Комментарий добавлен');
-                            commentInput.value = '';
+                postsContainer.appendChild(postElement);
+            });
+            
+            // Добавляем обработчики событий для лайков и комментариев
+            document.querySelectorAll('.post-action-btn[data-post-id]').forEach(button => {
+                if (button.querySelector('.fa-thumbs-up')) {
+                    button.addEventListener('click', function() {
+                        const postId = parseInt(this.dataset.postId);
+                        const post = posts.find(p => p.id === postId);
+                        
+                        if (post.likes.includes(currentUser.id)) {
+                            post.likes = post.likes.filter(id => id !== currentUser.id);
+                        } else {
+                            post.likes.push(currentUser.id);
                         }
+                        
+                        localStorage.setItem('facexi_posts', JSON.stringify(posts));
+                        loadPosts();
+                    });
+                }
+            });
+            
+            document.querySelectorAll('.add-comment input').forEach(input => {
+                input.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter' && this.value.trim() !== '') {
+                        const postId = parseInt(this.dataset.postId);
+                        const post = posts.find(p => p.id === postId);
+                        
+                        const newComment = {
+                            id: Date.now(),
+                            userId: currentUser.id,
+                            userName: currentUser.name,
+                            userAvatar: currentUser.avatar,
+                            text: this.value.trim(),
+                            timestamp: new Date().toISOString()
+                        };
+                        
+                        post.comments.push(newComment);
+                        localStorage.setItem('facexi_posts', JSON.stringify(posts));
+                        loadPosts();
                     }
                 });
+            });
+        }
+        
+        // Загрузка историй
+        function loadStories() {
+            // Оставляем только первую историю (кнопку создания)
+            const createStoryBtn = document.getElementById('createStoryBtn');
+            storiesContainer.innerHTML = '';
+            storiesContainer.appendChild(createStoryBtn);
+            
+            if (stories.length === 0) return;
+            
+            stories.slice(0, 5).forEach(story => {
+                const storyElement = document.createElement('div');
+                storyElement.className = 'story';
+                storyElement.innerHTML = `
+                    <div class="story-bg" style="background-image: url(${story.image})"></div>
+                    <div class="story-user">${story.userName}</div>
+                `;
                 
-                return postElement;
-            }
-            
-            // Обработчики для кнопок "Подписаться"
-            const followButtons = document.querySelectorAll('.follow-btn');
-            followButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    if (button.textContent === 'Подписаться') {
-                        button.textContent = 'Отписаться';
-                        showNotification('Вы подписались на пользователя');
-                    } else {
-                        button.textContent = 'Подписаться';
-                        showNotification('Вы отписались от пользователя');
-                    }
-                });
+                storiesContainer.appendChild(storyElement);
             });
+        }
+        
+        // Форматирование времени
+        function formatTime(timestamp) {
+            const now = new Date();
+            const postTime = new Date(timestamp);
+            const diffMs = now - postTime;
+            const diffMins = Math.floor(diffMs / 60000);
+            const diffHours = Math.floor(diffMs / 3600000);
+            const diffDays = Math.floor(diffMs / 86400000);
             
-            // Обработчики для сторис
-            const stories = document.querySelectorAll('.story');
-            stories.forEach(story => {
-                story.addEventListener('click', function() {
-                    const username = story.querySelector('.story-username').textContent;
-                    showNotification(`Просмотр сторис от ${username}`);
-                });
-            });
-        });
+            if (diffMins < 1) return 'только что';
+            if (diffMins < 60) return `${diffMins} мин.`;
+            if (diffHours < 24) return `${diffHours} ч.`;
+            if (diffDays < 7) return `${diffDays} дн.`;
+            
+            return postTime.toLocaleDateString('ru-RU');
+        }
     </script>
 </body>
 </html>

@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FaceXI - Социальная сеть с синхронизацией</title>
+    <title>FaceXI - Социальная сеть</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -23,6 +23,7 @@
             --text-primary: #050505;
             --text-secondary: #65676b;
             --border: #dddfe2;
+            --verified: #1877f2;
         }
         
         body {
@@ -69,6 +70,7 @@
         .search-bar {
             flex: 0 1 680px;
             margin: 0 20px;
+            position: relative;
         }
         
         .search-bar input {
@@ -78,6 +80,30 @@
             border: 1px solid var(--border);
             background-color: var(--bg-color);
             font-size: 15px;
+        }
+        
+        .search-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            max-height: 300px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+        }
+        
+        .search-result-item {
+            padding: 10px 15px;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+        }
+        
+        .search-result-item:hover {
+            background-color: var(--bg-color);
         }
         
         .nav-icons {
@@ -383,6 +409,14 @@
         
         .post-user .name {
             font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+        
+        .verified-badge {
+            color: var(--verified);
+            margin-left: 5px;
+            font-size: 14px;
         }
         
         .post-user .time {
@@ -487,6 +521,8 @@
         .comment .name {
             font-weight: 600;
             font-size: 13px;
+            display: flex;
+            align-items: center;
         }
         
         .comment .text {
@@ -644,6 +680,17 @@
             border-radius: 5px;
             border: 1px solid var(--border);
             font-size: 15px;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .checkbox-group input {
+            width: auto;
+            margin-right: 10px;
         }
         
         .auth-button {
@@ -1005,6 +1052,10 @@
                             <option value="female">Женский</option>
                         </select>
                     </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="registerHasCompany">
+                        <label for="registerHasCompany">У вас есть компания?</label>
+                    </div>
                     <button type="submit" class="auth-button">Зарегистрироваться</button>
                 </form>
             </div>
@@ -1091,7 +1142,8 @@
                 </div>
                 
                 <div class="search-bar">
-                    <input type="text" placeholder="Поиск в FaceXI">
+                    <input type="text" placeholder="Поиск постов и комментариев..." id="searchInput">
+                    <div class="search-results" id="searchResults"></div>
                 </div>
                 
                 <div class="nav-icons">
@@ -1431,6 +1483,47 @@
                 this.saveStories(stories);
                 return story;
             }
+            
+            // Поиск по постам и комментариям
+            searchPosts(query) {
+                const posts = this.getPosts();
+                const results = [];
+                
+                if (!query.trim()) return results;
+                
+                const searchTerm = query.toLowerCase();
+                
+                posts.forEach(post => {
+                    // Поиск по тексту поста
+                    if (post.text && post.text.toLowerCase().includes(searchTerm)) {
+                        results.push({
+                            type: 'post',
+                            id: post.id,
+                            text: post.text,
+                            userName: post.userName,
+                            timestamp: post.timestamp
+                        });
+                    }
+                    
+                    // Поиск по комментариям
+                    if (post.comments && post.comments.length > 0) {
+                        post.comments.forEach(comment => {
+                            if (comment.text && comment.text.toLowerCase().includes(searchTerm)) {
+                                results.push({
+                                    type: 'comment',
+                                    id: comment.id,
+                                    text: comment.text,
+                                    userName: comment.userName,
+                                    postId: post.id,
+                                    timestamp: comment.timestamp
+                                });
+                            }
+                        });
+                    }
+                });
+                
+                return results;
+            }
         }
         
         // Данные приложения
@@ -1446,6 +1539,8 @@
         const mainContent = document.getElementById('mainContent');
         const postsContainer = document.getElementById('postsContainer');
         const storiesContainer = document.getElementById('storiesContainer');
+        const searchInput = document.getElementById('searchInput');
+        const searchResults = document.getElementById('searchResults');
         
         // Инициализация приложения
         document.addEventListener('DOMContentLoaded', function() {
@@ -1506,6 +1601,15 @@
             const nameElements = document.querySelectorAll('.name, #sidebarName');
             nameElements.forEach(element => {
                 element.textContent = currentUser.name;
+                // Добавляем значок верификации, если пользователь верифицирован
+                if (currentUser.isVerified) {
+                    if (!element.querySelector('.verified-badge')) {
+                        const verifiedBadge = document.createElement('span');
+                        verifiedBadge.className = 'verified-badge';
+                        verifiedBadge.innerHTML = '<i class="fas fa-check-circle"></i>';
+                        element.appendChild(verifiedBadge);
+                    }
+                }
             });
         }
         
@@ -1552,6 +1656,7 @@
                 const password = document.getElementById('registerPassword').value;
                 const birthday = document.getElementById('registerBirthday').value;
                 const gender = document.getElementById('registerGender').value;
+                const hasCompany = document.getElementById('registerHasCompany').checked;
                 
                 // Проверяем, есть ли уже пользователь с таким email
                 if (cloudStorage.findUserByEmail(email)) {
@@ -1568,7 +1673,8 @@
                     gender,
                     avatar: null,
                     bio: '',
-                    location: ''
+                    location: '',
+                    isVerified: hasCompany // Верифицируем, если есть компания
                 };
                 
                 cloudStorage.addUser(newUser);
@@ -1764,6 +1870,96 @@
                     });
                 }
             });
+            
+            // Поиск
+            searchInput.addEventListener('input', function() {
+                const query = this.value.trim();
+                if (query.length > 0) {
+                    const results = cloudStorage.searchPosts(query);
+                    displaySearchResults(results);
+                } else {
+                    searchResults.style.display = 'none';
+                }
+            });
+            
+            // Закрытие результатов поиска при клике вне области
+            document.addEventListener('click', function(e) {
+                if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+                    searchResults.style.display = 'none';
+                }
+            });
+        }
+        
+        // Отображение результатов поиска
+        function displaySearchResults(results) {
+            searchResults.innerHTML = '';
+            
+            if (results.length === 0) {
+                searchResults.innerHTML = '<div class="search-result-item">Ничего не найдено</div>';
+            } else {
+                results.forEach(result => {
+                    const item = document.createElement('div');
+                    item.className = 'search-result-item';
+                    
+                    let content = '';
+                    if (result.type === 'post') {
+                        content = `
+                            <div><strong>${result.userName}</strong>: ${result.text}</div>
+                            <small>${formatTime(result.timestamp)}</small>
+                        `;
+                    } else if (result.type === 'comment') {
+                        content = `
+                            <div><strong>${result.userName}</strong> (комментарий): ${result.text}</div>
+                            <small>${formatTime(result.timestamp)}</small>
+                        `;
+                    }
+                    
+                    item.innerHTML = content;
+                    item.addEventListener('click', function() {
+                        // Показываем пост с найденным комментарием
+                        if (result.type === 'comment') {
+                            showPostWithComment(result.postId, result.id);
+                        } else {
+                            showPost(result.id);
+                        }
+                        searchResults.style.display = 'none';
+                        searchInput.value = '';
+                    });
+                    
+                    searchResults.appendChild(item);
+                });
+            }
+            
+            searchResults.style.display = 'block';
+        }
+        
+        // Показать пост
+        function showPost(postId) {
+            // Прокручиваем к посту
+            const postElement = document.querySelector(`[data-post-id="${postId}"]`);
+            if (postElement) {
+                postElement.scrollIntoView({ behavior: 'smooth' });
+                // Можно добавить подсветку поста
+                postElement.style.boxShadow = '0 0 0 2px var(--primary)';
+                setTimeout(() => {
+                    postElement.style.boxShadow = '';
+                }, 2000);
+            }
+        }
+        
+        // Показать пост с комментарием
+        function showPostWithComment(postId, commentId) {
+            showPost(postId);
+            // Дополнительно можно подсветить комментарий
+            setTimeout(() => {
+                const commentElement = document.querySelector(`[data-comment-id="${commentId}"]`);
+                if (commentElement) {
+                    commentElement.style.backgroundColor = '#fffacd';
+                    setTimeout(() => {
+                        commentElement.style.backgroundColor = '';
+                    }, 2000);
+                }
+            }, 500);
         }
         
         // Загрузка постов
@@ -1779,11 +1975,17 @@
             posts.forEach(post => {
                 const postElement = document.createElement('div');
                 postElement.className = 'post';
+                postElement.setAttribute('data-post-id', post.id);
+                
+                // Получаем информацию о пользователе для отображения верификации
+                const postUser = cloudStorage.findUserById(post.userId);
+                const isVerified = postUser ? postUser.isVerified : false;
+                
                 postElement.innerHTML = `
                     <div class="post-header">
                         <div class="avatar" style="${post.userAvatar ? `background-image: url(${post.userAvatar})` : ''}">${!post.userAvatar ? post.userName.split(' ').map(n => n[0]).join('') : ''}</div>
                         <div class="post-user">
-                            <div class="name">${post.userName}</div>
+                            <div class="name">${post.userName}${isVerified ? '<span class="verified-badge"><i class="fas fa-check-circle"></i></span>' : ''}</div>
                             <div class="time">
                                 ${formatTime(post.timestamp)} <i class="fas fa-globe-americas"></i>
                             </div>
@@ -1823,20 +2025,24 @@
                     </div>
                     
                     <div class="comments">
-                        ${post.comments.map(comment => `
-                            <div class="comment">
-                                <div class="avatar" style="${comment.userAvatar ? `background-image: url(${comment.userAvatar})` : ''}">${!comment.userAvatar ? comment.userName.split(' ').map(n => n[0]).join('') : ''}</div>
-                                <div class="comment-content">
-                                    <div class="name">${comment.userName}</div>
-                                    <div class="text">${comment.text}</div>
-                                    <div class="comment-actions">
-                                        <span class="comment-action">Нравится</span>
-                                        <span class="comment-action">Ответить</span>
-                                        <span class="comment-action">${formatTime(comment.timestamp)}</span>
+                        ${post.comments.map(comment => {
+                            const commentUser = cloudStorage.findUserById(comment.userId);
+                            const commentIsVerified = commentUser ? commentUser.isVerified : false;
+                            return `
+                                <div class="comment" data-comment-id="${comment.id}">
+                                    <div class="avatar" style="${comment.userAvatar ? `background-image: url(${comment.userAvatar})` : ''}">${!comment.userAvatar ? comment.userName.split(' ').map(n => n[0]).join('') : ''}</div>
+                                    <div class="comment-content">
+                                        <div class="name">${comment.userName}${commentIsVerified ? '<span class="verified-badge"><i class="fas fa-check-circle"></i></span>' : ''}</div>
+                                        <div class="text">${comment.text}</div>
+                                        <div class="comment-actions">
+                                            <span class="comment-action">Нравится</span>
+                                            <span class="comment-action">Ответить</span>
+                                            <span class="comment-action">${formatTime(comment.timestamp)}</span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        `).join('')}
+                            `;
+                        }).join('')}
                         
                         <div class="add-comment">
                             <div class="avatar" style="${currentUser.avatar ? `background-image: url(${currentUser.avatar})` : ''}">${!currentUser.avatar ? currentUser.name.split(' ').map(n => n[0]).join('') : ''}</div>

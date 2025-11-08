@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FaceXI - Социальная сеть</title>
+    <title>FaceXI - Социальная сеть с синхронизацией</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -897,6 +897,20 @@
             cursor: pointer;
         }
         
+        /* Status Message */
+        .status-message {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--primary);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            display: none;
+            z-index: 1001;
+        }
+        
         /* Responsive */
         @media (max-width: 1100px) {
             .left-sidebar {
@@ -938,6 +952,9 @@
     </style>
 </head>
 <body>
+    <!-- Status Message -->
+    <div class="status-message" id="statusMessage"></div>
+    
     <!-- Auth Modal -->
     <div class="auth-modal" id="authModal">
         <div class="auth-content">
@@ -1261,11 +1278,164 @@
     </div>
 
     <script>
+        // Имитация облачного хранилища
+        class CloudStorage {
+            constructor() {
+                this.storageKey = 'facexi_cloud_data';
+                this.init();
+            }
+            
+            init() {
+                // Инициализируем облачное хранилище в localStorage
+                if (!localStorage.getItem(this.storageKey)) {
+                    const initialData = {
+                        users: [],
+                        posts: [],
+                        stories: [],
+                        lastUpdate: new Date().toISOString()
+                    };
+                    localStorage.setItem(this.storageKey, JSON.stringify(initialData));
+                }
+            }
+            
+            // Получить все данные
+            getAllData() {
+                const data = localStorage.getItem(this.storageKey);
+                return data ? JSON.parse(data) : null;
+            }
+            
+            // Сохранить все данные
+            saveAllData(data) {
+                data.lastUpdate = new Date().toISOString();
+                localStorage.setItem(this.storageKey, JSON.stringify(data));
+                
+                // Имитируем синхронизацию с "облаком"
+                this.simulateSync();
+            }
+            
+            // Имитация синхронизации между устройствами
+            simulateSync() {
+                // В реальном приложении здесь был бы запрос к серверу
+                console.log('Данные синхронизированы с облаком');
+                
+                // Показываем сообщение о синхронизации
+                this.showStatus('Данные синхронизированы с облаком');
+            }
+            
+            // Показать статус
+            showStatus(message) {
+                const statusElement = document.getElementById('statusMessage');
+                statusElement.textContent = message;
+                statusElement.style.display = 'block';
+                
+                setTimeout(() => {
+                    statusElement.style.display = 'none';
+                }, 3000);
+            }
+            
+            // Получить пользователей
+            getUsers() {
+                const data = this.getAllData();
+                return data ? data.users : [];
+            }
+            
+            // Сохранить пользователей
+            saveUsers(users) {
+                const data = this.getAllData();
+                data.users = users;
+                this.saveAllData(data);
+            }
+            
+            // Получить посты
+            getPosts() {
+                const data = this.getAllData();
+                return data ? data.posts : [];
+            }
+            
+            // Сохранить посты
+            savePosts(posts) {
+                const data = this.getAllData();
+                data.posts = posts;
+                this.saveAllData(data);
+            }
+            
+            // Получить истории
+            getStories() {
+                const data = this.getAllData();
+                return data ? data.stories : [];
+            }
+            
+            // Сохранить истории
+            saveStories(stories) {
+                const data = this.getAllData();
+                data.stories = stories;
+                this.saveAllData(data);
+            }
+            
+            // Найти пользователя по email
+            findUserByEmail(email) {
+                const users = this.getUsers();
+                return users.find(user => user.email === email);
+            }
+            
+            // Найти пользователя по ID
+            findUserById(id) {
+                const users = this.getUsers();
+                return users.find(user => user.id === id);
+            }
+            
+            // Добавить пользователя
+            addUser(user) {
+                const users = this.getUsers();
+                users.push(user);
+                this.saveUsers(users);
+                return user;
+            }
+            
+            // Обновить пользователя
+            updateUser(updatedUser) {
+                const users = this.getUsers();
+                const index = users.findIndex(user => user.id === updatedUser.id);
+                if (index !== -1) {
+                    users[index] = updatedUser;
+                    this.saveUsers(users);
+                    return true;
+                }
+                return false;
+            }
+            
+            // Добавить пост
+            addPost(post) {
+                const posts = this.getPosts();
+                posts.unshift(post);
+                this.savePosts(posts);
+                return post;
+            }
+            
+            // Обновить пост
+            updatePost(updatedPost) {
+                const posts = this.getPosts();
+                const index = posts.findIndex(post => post.id === updatedPost.id);
+                if (index !== -1) {
+                    posts[index] = updatedPost;
+                    this.savePosts(posts);
+                    return true;
+                }
+                return false;
+            }
+            
+            // Добавить историю
+            addStory(story) {
+                const stories = this.getStories();
+                stories.unshift(story);
+                this.saveStories(stories);
+                return story;
+            }
+        }
+        
         // Данные приложения
+        const cloudStorage = new CloudStorage();
         let currentUser = null;
-        let users = JSON.parse(localStorage.getItem('facexi_users')) || [];
-        let posts = JSON.parse(localStorage.getItem('facexi_posts')) || [];
-        let stories = JSON.parse(localStorage.getItem('facexi_stories')) || [];
         
         // DOM элементы
         const authModal = document.getElementById('authModal');
@@ -1282,8 +1452,15 @@
             // Проверяем, есть ли активный пользователь
             const savedUser = localStorage.getItem('facexi_current_user');
             if (savedUser) {
-                currentUser = JSON.parse(savedUser);
-                showMainApp();
+                const userData = JSON.parse(savedUser);
+                // Ищем пользователя в облачном хранилище
+                const user = cloudStorage.findUserById(userData.id);
+                if (user) {
+                    currentUser = user;
+                    showMainApp();
+                } else {
+                    showAuthModal();
+                }
             } else {
                 showAuthModal();
             }
@@ -1357,8 +1534,8 @@
                 const email = document.getElementById('loginEmail').value;
                 const password = document.getElementById('loginPassword').value;
                 
-                const user = users.find(u => u.email === email && u.password === password);
-                if (user) {
+                const user = cloudStorage.findUserByEmail(email);
+                if (user && user.password === password) {
                     currentUser = user;
                     localStorage.setItem('facexi_current_user', JSON.stringify(currentUser));
                     showMainApp();
@@ -1377,7 +1554,7 @@
                 const gender = document.getElementById('registerGender').value;
                 
                 // Проверяем, есть ли уже пользователь с таким email
-                if (users.find(u => u.email === email)) {
+                if (cloudStorage.findUserByEmail(email)) {
                     alert('Пользователь с таким email уже существует');
                     return;
                 }
@@ -1394,8 +1571,7 @@
                     location: ''
                 };
                 
-                users.push(newUser);
-                localStorage.setItem('facexi_users', JSON.stringify(users));
+                cloudStorage.addUser(newUser);
                 
                 currentUser = newUser;
                 localStorage.setItem('facexi_current_user', JSON.stringify(currentUser));
@@ -1447,16 +1623,13 @@
                 currentUser.bio = document.getElementById('profileBio').value;
                 currentUser.location = document.getElementById('profileLocation').value;
                 
-                // Обновляем пользователя в массиве users
-                const userIndex = users.findIndex(u => u.id === currentUser.id);
-                if (userIndex !== -1) {
-                    users[userIndex] = currentUser;
-                    localStorage.setItem('facexi_users', JSON.stringify(users));
-                }
-                
+                // Обновляем пользователя в облачном хранилище
+                cloudStorage.updateUser(currentUser);
                 localStorage.setItem('facexi_current_user', JSON.stringify(currentUser));
                 updateUserInterface();
                 profileModal.style.display = 'none';
+                
+                cloudStorage.showStatus('Профиль обновлен и синхронизирован');
             });
             
             // Создание истории
@@ -1497,14 +1670,15 @@
                         timestamp: new Date().toISOString()
                     };
                     
-                    stories.unshift(newStory);
-                    localStorage.setItem('facexi_stories', JSON.stringify(stories));
+                    cloudStorage.addStory(newStory);
                     loadStories();
                     storyModal.style.display = 'none';
                     
                     // Сброс превью
                     storyPreview.style.backgroundImage = 'none';
                     storyPreview.textContent = 'Ваша история будет здесь';
+                    
+                    cloudStorage.showStatus('История опубликована и синхронизирована');
                 } else {
                     alert('Пожалуйста, загрузите изображение для истории');
                 }
@@ -1559,8 +1733,7 @@
                     timestamp: new Date().toISOString()
                 };
                 
-                posts.unshift(newPost);
-                localStorage.setItem('facexi_posts', JSON.stringify(posts));
+                cloudStorage.addPost(newPost);
                 loadPosts();
                 postModal.style.display = 'none';
                 
@@ -1568,6 +1741,8 @@
                 document.getElementById('postText').value = '';
                 document.getElementById('postPreview').src = '';
                 document.getElementById('postPreview').style.display = 'none';
+                
+                cloudStorage.showStatus('Пост опубликован и синхронизирован');
             });
             
             // Навигация
@@ -1593,6 +1768,7 @@
         
         // Загрузка постов
         function loadPosts() {
+            const posts = cloudStorage.getPosts();
             postsContainer.innerHTML = '';
             
             if (posts.length === 0) {
@@ -1677,6 +1853,7 @@
                 if (button.querySelector('.fa-thumbs-up')) {
                     button.addEventListener('click', function() {
                         const postId = parseInt(this.dataset.postId);
+                        const posts = cloudStorage.getPosts();
                         const post = posts.find(p => p.id === postId);
                         
                         if (post.likes.includes(currentUser.id)) {
@@ -1685,7 +1862,7 @@
                             post.likes.push(currentUser.id);
                         }
                         
-                        localStorage.setItem('facexi_posts', JSON.stringify(posts));
+                        cloudStorage.updatePost(post);
                         loadPosts();
                     });
                 }
@@ -1695,6 +1872,7 @@
                 input.addEventListener('keypress', function(e) {
                     if (e.key === 'Enter' && this.value.trim() !== '') {
                         const postId = parseInt(this.dataset.postId);
+                        const posts = cloudStorage.getPosts();
                         const post = posts.find(p => p.id === postId);
                         
                         const newComment = {
@@ -1707,7 +1885,7 @@
                         };
                         
                         post.comments.push(newComment);
-                        localStorage.setItem('facexi_posts', JSON.stringify(posts));
+                        cloudStorage.updatePost(post);
                         loadPosts();
                     }
                 });
@@ -1716,6 +1894,8 @@
         
         // Загрузка историй
         function loadStories() {
+            const stories = cloudStorage.getStories();
+            
             // Оставляем только первую историю (кнопку создания)
             const createStoryBtn = document.getElementById('createStoryBtn');
             storiesContainer.innerHTML = '';

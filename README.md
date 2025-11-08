@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FaceXI - Социальная сеть</title>
+    <title>FaceXI - Социальная сеть с уникальными функциями</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -18,12 +18,14 @@
         :root {
             --primary: #1877f2;
             --secondary: #42b72a;
+            --family: #ff6b6b;
             --bg-color: #f0f2f5;
             --card-bg: #ffffff;
             --text-primary: #050505;
             --text-secondary: #65676b;
             --border: #dddfe2;
-            --verified: #1877f2;
+            --shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s cubic-bezier(0.08, 0.52, 0.52, 1);
         }
         
         body {
@@ -41,10 +43,11 @@
         /* Header */
         header {
             background-color: var(--card-bg);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow);
             position: sticky;
             top: 0;
             z-index: 100;
+            transition: var(--transition);
         }
         
         .header-content {
@@ -61,6 +64,11 @@
             font-weight: bold;
             color: var(--primary);
             cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .logo:hover {
+            transform: scale(1.05);
         }
         
         .logo i {
@@ -80,6 +88,13 @@
             border: 1px solid var(--border);
             background-color: var(--bg-color);
             font-size: 15px;
+            transition: var(--transition);
+        }
+        
+        .search-bar input:focus {
+            background-color: white;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(24, 119, 242, 0.2);
         }
         
         .search-results {
@@ -89,21 +104,45 @@
             right: 0;
             background: white;
             border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: var(--shadow);
             max-height: 300px;
             overflow-y: auto;
             z-index: 1000;
             display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
         .search-result-item {
             padding: 10px 15px;
             border-bottom: 1px solid var(--border);
             cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
         }
         
         .search-result-item:hover {
             background-color: var(--bg-color);
+        }
+        
+        .search-result-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 10px;
+            background-size: cover;
+            background-position: center;
         }
         
         .nav-icons {
@@ -120,7 +159,8 @@
             justify-content: center;
             background-color: var(--bg-color);
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: var(--transition);
+            position: relative;
         }
         
         .nav-icon.active {
@@ -130,10 +170,26 @@
         
         .nav-icon:hover {
             background-color: var(--border);
+            transform: scale(1.1);
         }
         
         .nav-icon.active:hover {
             background-color: var(--primary);
+        }
+        
+        .nav-icon .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #ff375f;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .user-avatar {
@@ -149,6 +205,13 @@
             cursor: pointer;
             background-size: cover;
             background-position: center;
+            transition: var(--transition);
+            border: 2px solid transparent;
+        }
+        
+        .user-avatar:hover {
+            border-color: var(--primary);
+            transform: scale(1.05);
         }
         
         /* Main Content */
@@ -161,6 +224,10 @@
         /* Left Sidebar */
         .left-sidebar {
             flex: 0 0 280px;
+            position: sticky;
+            top: 70px;
+            height: calc(100vh - 90px);
+            overflow-y: auto;
         }
         
         .sidebar-card {
@@ -168,13 +235,20 @@
             border-radius: 8px;
             padding: 15px;
             margin-bottom: 20px;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+        
+        .sidebar-card:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
         }
         
         .user-info {
             display: flex;
             align-items: center;
             margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border);
         }
         
         .user-info .avatar {
@@ -190,6 +264,11 @@
             margin-right: 10px;
             background-size: cover;
             background-position: center;
+            transition: var(--transition);
+        }
+        
+        .user-info .avatar:hover {
+            transform: scale(1.1);
         }
         
         .sidebar-menu {
@@ -203,10 +282,12 @@
             display: flex;
             align-items: center;
             margin-bottom: 5px;
+            transition: var(--transition);
         }
         
         .sidebar-menu li:hover {
             background-color: var(--bg-color);
+            transform: translateX(5px);
         }
         
         .sidebar-menu li.active {
@@ -241,7 +322,12 @@
             border-radius: 8px;
             padding: 15px;
             margin-bottom: 20px;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+        
+        .create-post:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
         
         .post-input {
@@ -263,6 +349,11 @@
             margin-right: 10px;
             background-size: cover;
             background-position: center;
+            transition: var(--transition);
+        }
+        
+        .post-input .avatar:hover {
+            transform: scale(1.1);
         }
         
         .post-input input {
@@ -273,6 +364,11 @@
             background-color: var(--bg-color);
             font-size: 17px;
             cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .post-input input:hover {
+            background-color: #e4e6e9;
         }
         
         .post-actions {
@@ -288,11 +384,14 @@
             padding: 8px 15px;
             border-radius: 8px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: var(--transition);
+            flex: 1;
+            justify-content: center;
         }
         
         .post-action:hover {
             background-color: var(--bg-color);
+            transform: translateY(-2px);
         }
         
         .post-action i {
@@ -302,6 +401,115 @@
         
         .photo-video i { color: #45bd62; }
         .feeling i { color: #f7b928; }
+        .live i { color: #f5533d; }
+        
+        /* Post Options */
+        .post-options {
+            padding: 10px 0;
+            border-top: 1px solid var(--border);
+            display: none;
+        }
+        
+        .post-option {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .post-option input {
+            margin-right: 10px;
+        }
+        
+        /* Family Section */
+        .family-section {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+        
+        .family-section:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .section-title {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
+        .add-family-btn {
+            color: var(--primary);
+            cursor: pointer;
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: var(--transition);
+        }
+        
+        .add-family-btn:hover {
+            background-color: var(--bg-color);
+        }
+        
+        .family-members {
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            padding: 10px 0;
+        }
+        
+        .family-member {
+            text-align: center;
+            flex: 0 0 100px;
+            transition: var(--transition);
+        }
+        
+        .family-member:hover {
+            transform: translateY(-5px);
+        }
+        
+        .family-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--family);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin: 0 auto 10px;
+            font-size: 20px;
+            transition: var(--transition);
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .family-avatar:hover {
+            transform: scale(1.1);
+        }
+        
+        .add-family {
+            border: 2px dashed var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .add-family:hover {
+            border-color: var(--primary);
+            background-color: rgba(24, 119, 242, 0.05);
+        }
         
         /* Stories */
         .stories {
@@ -318,8 +526,14 @@
             border-radius: 10px;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow);
             cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .story:hover {
+            transform: scale(1.03);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
         
         .story-bg {
@@ -327,11 +541,11 @@
             height: 100%;
             background-size: cover;
             background-position: center;
-            transition: transform 0.3s;
+            transition: transform 0.5s;
         }
         
         .story:hover .story-bg {
-            transform: scale(1.05);
+            transform: scale(1.1);
         }
         
         .story-user {
@@ -362,6 +576,12 @@
             color: white;
             font-size: 20px;
             border: 4px solid var(--card-bg);
+            transition: var(--transition);
+        }
+        
+        .create-story:hover .plus {
+            background-color: #166fe5;
+            transform: translateX(-50%) scale(1.1);
         }
         
         .create-story .text {
@@ -379,7 +599,13 @@
             background-color: var(--card-bg);
             border-radius: 8px;
             margin-bottom: 20px;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            overflow: hidden;
+        }
+        
+        .post:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
         
         .post-header {
@@ -401,6 +627,11 @@
             margin-right: 10px;
             background-size: cover;
             background-position: center;
+            transition: var(--transition);
+        }
+        
+        .post-header .avatar:hover {
+            transform: scale(1.1);
         }
         
         .post-user {
@@ -409,14 +640,6 @@
         
         .post-user .name {
             font-weight: 600;
-            display: flex;
-            align-items: center;
-        }
-        
-        .verified-badge {
-            color: var(--verified);
-            margin-left: 5px;
-            font-size: 14px;
         }
         
         .post-user .time {
@@ -430,12 +653,22 @@
             margin-left: 5px;
         }
         
+        .post-badge {
+            background: var(--secondary);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 12px;
+            margin-left: 5px;
+        }
+        
         .post-content {
             padding: 0 15px 15px;
         }
         
         .post-text {
             margin-bottom: 10px;
+            line-height: 1.4;
         }
         
         .post-image {
@@ -444,6 +677,11 @@
             margin-bottom: 10px;
             max-height: 500px;
             object-fit: cover;
+            transition: var(--transition);
+        }
+        
+        .post-image:hover {
+            opacity: 0.95;
         }
         
         .post-stats {
@@ -468,13 +706,14 @@
             padding: 8px 5px;
             border-radius: 4px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: var(--transition);
             flex: 1;
             justify-content: center;
         }
         
         .post-action-btn:hover {
             background-color: var(--bg-color);
+            transform: translateY(-2px);
         }
         
         .post-action-btn i {
@@ -488,11 +727,14 @@
         
         .comments {
             padding: 10px 15px;
+            max-height: 300px;
+            overflow-y: auto;
         }
         
         .comment {
             display: flex;
             margin-bottom: 10px;
+            animation: fadeIn 0.3s ease;
         }
         
         .comment .avatar {
@@ -509,6 +751,11 @@
             flex-shrink: 0;
             background-size: cover;
             background-position: center;
+            transition: var(--transition);
+        }
+        
+        .comment .avatar:hover {
+            transform: scale(1.1);
         }
         
         .comment-content {
@@ -516,13 +763,16 @@
             padding: 8px 12px;
             border-radius: 18px;
             flex: 1;
+            transition: var(--transition);
+        }
+        
+        .comment-content:hover {
+            background-color: #e4e6e9;
         }
         
         .comment .name {
             font-weight: 600;
             font-size: 13px;
-            display: flex;
-            align-items: center;
         }
         
         .comment .text {
@@ -539,6 +789,12 @@
         .comment-action {
             margin-right: 15px;
             cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .comment-action:hover {
+            color: var(--primary);
+            text-decoration: underline;
         }
         
         .add-comment {
@@ -553,11 +809,21 @@
             border: none;
             background-color: var(--bg-color);
             font-size: 14px;
+            transition: var(--transition);
+        }
+        
+        .add-comment input:focus {
+            background-color: white;
+            box-shadow: 0 0 0 2px rgba(24, 119, 242, 0.2);
         }
         
         /* Right Sidebar */
         .right-sidebar {
             flex: 0 0 280px;
+            position: sticky;
+            top: 70px;
+            height: calc(100vh - 90px);
+            overflow-y: auto;
         }
         
         .contacts h3 {
@@ -572,10 +838,12 @@
             padding: 8px;
             border-radius: 8px;
             cursor: pointer;
+            transition: var(--transition);
         }
         
         .contact:hover {
             background-color: var(--bg-color);
+            transform: translateX(5px);
         }
         
         .contact .avatar {
@@ -591,10 +859,15 @@
             margin-right: 10px;
             background-size: cover;
             background-position: center;
+            transition: var(--transition);
         }
         
-        /* Auth Modal */
-        .auth-modal {
+        .contact .avatar:hover {
+            transform: scale(1.1);
+        }
+        
+        /* Modals */
+        .modal-overlay {
             display: none;
             position: fixed;
             top: 0;
@@ -605,17 +878,24 @@
             z-index: 1000;
             align-items: center;
             justify-content: center;
+            animation: fadeIn 0.3s ease;
         }
         
-        .auth-content {
+        .modal-content {
             background-color: white;
             border-radius: 8px;
-            width: 400px;
+            width: 500px;
             max-width: 90%;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            transform: scale(0.9);
+            animation: modalAppear 0.3s ease forwards;
         }
         
-        .auth-header {
+        @keyframes modalAppear {
+            to { transform: scale(1); }
+        }
+        
+        .modal-header {
             padding: 15px;
             border-bottom: 1px solid var(--border);
             display: flex;
@@ -623,20 +903,33 @@
             align-items: center;
         }
         
-        .auth-header h2 {
+        .modal-header h2 {
             font-size: 20px;
         }
         
-        .close-auth {
+        .close-modal {
             font-size: 24px;
             cursor: pointer;
             color: var(--text-secondary);
+            transition: var(--transition);
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
         }
         
-        .auth-body {
+        .close-modal:hover {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+        }
+        
+        .modal-body {
             padding: 20px;
         }
         
+        /* Auth Modal */
         .auth-tabs {
             display: flex;
             margin-bottom: 20px;
@@ -649,11 +942,16 @@
             padding: 10px;
             cursor: pointer;
             border-bottom: 3px solid transparent;
+            transition: var(--transition);
         }
         
         .auth-tab.active {
             border-bottom: 3px solid var(--primary);
             font-weight: bold;
+        }
+        
+        .auth-tab:hover {
+            background-color: var(--bg-color);
         }
         
         .auth-form {
@@ -662,6 +960,7 @@
         
         .auth-form.active {
             display: block;
+            animation: fadeIn 0.5s ease;
         }
         
         .form-group {
@@ -674,12 +973,18 @@
             font-weight: 500;
         }
         
-        .form-group input, .form-group select {
+        .form-group input, .form-group select, .form-group textarea {
             width: 100%;
             padding: 10px;
             border-radius: 5px;
             border: 1px solid var(--border);
             font-size: 15px;
+            transition: var(--transition);
+        }
+        
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(24, 119, 242, 0.2);
         }
         
         .checkbox-group {
@@ -704,58 +1009,15 @@
             font-weight: bold;
             cursor: pointer;
             margin-top: 10px;
+            transition: var(--transition);
         }
         
         .auth-button:hover {
             background-color: #166fe5;
+            transform: translateY(-2px);
         }
         
         /* Profile Modal */
-        .profile-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .profile-content {
-            background-color: white;
-            border-radius: 8px;
-            width: 500px;
-            max-width: 90%;
-            max-height: 90%;
-            overflow-y: auto;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-        }
-        
-        .profile-header {
-            padding: 15px;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .profile-header h2 {
-            font-size: 20px;
-        }
-        
-        .close-profile {
-            font-size: 24px;
-            cursor: pointer;
-            color: var(--text-secondary);
-        }
-        
-        .profile-body {
-            padding: 20px;
-        }
-        
         .profile-avatar {
             display: flex;
             flex-direction: column;
@@ -777,58 +1039,35 @@
             margin-bottom: 10px;
             background-size: cover;
             background-position: center;
+            transition: var(--transition);
+            border: 4px solid white;
+            box-shadow: var(--shadow);
+        }
+        
+        .profile-avatar .avatar:hover {
+            transform: scale(1.05);
         }
         
         .change-avatar {
             color: var(--primary);
             cursor: pointer;
             font-weight: 500;
+            transition: var(--transition);
+        }
+        
+        .change-avatar:hover {
+            text-decoration: underline;
+        }
+        
+        .unique-id {
+            background: var(--bg-color);
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            font-family: monospace;
         }
         
         /* Create Story Modal */
-        .story-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .story-content {
-            background-color: white;
-            border-radius: 8px;
-            width: 500px;
-            max-width: 90%;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-        }
-        
-        .story-header {
-            padding: 15px;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .story-header h2 {
-            font-size: 20px;
-        }
-        
-        .close-story {
-            font-size: 24px;
-            cursor: pointer;
-            color: var(--text-secondary);
-        }
-        
-        .story-body {
-            padding: 20px;
-        }
-        
         .story-preview {
             width: 100%;
             height: 300px;
@@ -840,6 +1079,11 @@
             justify-content: center;
             background-size: cover;
             background-position: center;
+            transition: var(--transition);
+        }
+        
+        .story-preview:hover {
+            background-color: #e4e6e9;
         }
         
         .story-preview-text {
@@ -861,52 +1105,15 @@
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .story-button:hover {
+            background-color: #166fe5;
+            transform: translateY(-2px);
         }
         
         /* Create Post Modal */
-        .post-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .post-content {
-            background-color: white;
-            border-radius: 8px;
-            width: 500px;
-            max-width: 90%;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-        }
-        
-        .post-modal-header {
-            padding: 15px;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .post-modal-header h2 {
-            font-size: 20px;
-        }
-        
-        .close-post {
-            font-size: 24px;
-            cursor: pointer;
-            color: var(--text-secondary);
-        }
-        
-        .post-modal-body {
-            padding: 20px;
-        }
-        
         .post-modal-text {
             width: 100%;
             min-height: 100px;
@@ -914,6 +1121,7 @@
             resize: none;
             font-size: 16px;
             margin-bottom: 15px;
+            transition: var(--transition);
         }
         
         .post-modal-text:focus {
@@ -925,6 +1133,11 @@
             border-radius: 8px;
             margin-bottom: 15px;
             display: none;
+            transition: var(--transition);
+        }
+        
+        .post-modal-preview:hover {
+            opacity: 0.9;
         }
         
         .post-modal-actions {
@@ -942,6 +1155,21 @@
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .post-modal-button:hover {
+            background-color: #166fe5;
+            transform: translateY(-2px);
+        }
+        
+        .post-modal-button.secondary {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+        }
+        
+        .post-modal-button.secondary:hover {
+            background-color: #e4e6e9;
         }
         
         /* Status Message */
@@ -953,9 +1181,192 @@
             color: white;
             padding: 10px 20px;
             border-radius: 5px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            box-shadow: var(--shadow);
             display: none;
             z-index: 1001;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        /* Family Management Modal */
+        .search-family-member {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        
+        .search-family-member input {
+            flex: 1;
+            padding: 10px 15px;
+            border-radius: 5px 0 0 5px;
+            border: 1px solid var(--border);
+            border-right: none;
+            transition: var(--transition);
+        }
+        
+        .search-family-member input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(24, 119, 242, 0.2);
+        }
+        
+        .search-family-member button {
+            padding: 10px 15px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .search-family-member button:hover {
+            background-color: #166fe5;
+        }
+        
+        .current-family-members {
+            margin-bottom: 20px;
+        }
+        
+        .family-member-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid var(--border);
+            transition: var(--transition);
+        }
+        
+        .family-member-item:hover {
+            background-color: var(--bg-color);
+        }
+        
+        .family-member-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .family-member-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 10px;
+            background-size: cover;
+            background-position: center;
+            transition: var(--transition);
+        }
+        
+        .family-member-avatar:hover {
+            transform: scale(1.1);
+        }
+        
+        .remove-family-member {
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 5px;
+            transition: var(--transition);
+        }
+        
+        .remove-family-member:hover {
+            color: #ff6b6b;
+            transform: scale(1.2);
+        }
+        
+        /* Accounts Modal */
+        .account-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 10px;
+            border: 1px solid var(--border);
+            transition: var(--transition);
+        }
+        
+        .account-item:hover {
+            background-color: var(--bg-color);
+            transform: translateX(5px);
+        }
+        
+        .account-item.active {
+            border-color: var(--primary);
+            background-color: rgba(24, 119, 242, 0.05);
+        }
+        
+        .account-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 10px;
+            background-size: cover;
+            background-position: center;
+            transition: var(--transition);
+        }
+        
+        .account-avatar:hover {
+            transform: scale(1.1);
+        }
+        
+        .account-info {
+            flex: 1;
+        }
+        
+        .account-name {
+            font-weight: 600;
+        }
+        
+        .account-id {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        
+        .add-account-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            border: 2px dashed var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: var(--transition);
+        }
+        
+        .add-account-btn:hover {
+            background-color: var(--bg-color);
+            border-color: var(--primary);
+        }
+        
+        /* Switch Account Button */
+        .switch-account-btn {
+            display: flex;
+            align-items: center;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 10px;
+            background-color: var(--bg-color);
+            transition: var(--transition);
+        }
+        
+        .switch-account-btn:hover {
+            background-color: var(--border);
+            transform: scale(1.05);
         }
         
         /* Responsive */
@@ -996,6 +1407,63 @@
         .hidden {
             display: none !important;
         }
+        
+        /* Video player styles */
+        .video-player {
+            width: 100%;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        
+        /* Feeling/Activity modal */
+        .feeling-options {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .feeling-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .feeling-option:hover {
+            background-color: var(--bg-color);
+            transform: scale(1.05);
+        }
+        
+        .feeling-option i {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        
+        /* File upload area */
+        .file-upload-area {
+            border: 2px dashed var(--border);
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .file-upload-area:hover {
+            border-color: var(--primary);
+            background-color: rgba(24, 119, 242, 0.05);
+        }
+        
+        .file-upload-area i {
+            font-size: 40px;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
@@ -1003,13 +1471,13 @@
     <div class="status-message" id="statusMessage"></div>
     
     <!-- Auth Modal -->
-    <div class="auth-modal" id="authModal">
-        <div class="auth-content">
-            <div class="auth-header">
+    <div class="modal-overlay" id="authModal">
+        <div class="modal-content">
+            <div class="modal-header">
                 <h2>FaceXI</h2>
-                <div class="close-auth" id="closeAuth">&times;</div>
+                <div class="close-modal" id="closeAuth">&times;</div>
             </div>
-            <div class="auth-body">
+            <div class="modal-body">
                 <div class="auth-tabs">
                     <div class="auth-tab active" data-tab="login">Вход</div>
                     <div class="auth-tab" data-tab="register">Регистрация</div>
@@ -1053,8 +1521,8 @@
                         </select>
                     </div>
                     <div class="checkbox-group">
-                        <input type="checkbox" id="registerHasCompany">
-                        <label for="registerHasCompany">У вас есть компания?</label>
+                        <input type="checkbox" id="makePublic" checked>
+                        <label for="makePublic">Сделать аккаунт общедоступным</label>
                     </div>
                     <button type="submit" class="auth-button">Зарегистрироваться</button>
                 </form>
@@ -1063,17 +1531,35 @@
     </div>
     
     <!-- Profile Modal -->
-    <div class="profile-modal" id="profileModal">
-        <div class="profile-content">
-            <div class="profile-header">
-                <h2>Редактирование профиля</h2>
-                <div class="close-profile" id="closeProfile">&times;</div>
+    <div class="modal-overlay" id="profileModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Настройки профиля</h2>
+                <div class="close-modal" id="closeProfile">&times;</div>
             </div>
-            <div class="profile-body">
+            <div class="modal-body">
                 <div class="profile-avatar">
-                    <div class="avatar" id="profileAvatarPreview"></div>
-                    <div class="change-avatar" id="changeAvatar">Изменить фото профиля</div>
-                    <input type="file" id="avatarUpload" accept="image/*" class="hidden">
+                    <div class="avatar" id="profileAvatar">ИИ</div>
+                    <div id="profileNameDisplay">Иван Иванов</div>
+                </div>
+                
+                <button class="auth-button secondary" id="manageFamilyBtn" style="margin-bottom: 15px;">
+                    <i class="fas fa-users"></i> Управление семьей
+                </button>
+                
+                <div class="form-group">
+                    <label>Ваш уникальный ID:</label>
+                    <div class="unique-id" id="uniqueId">собачка-осадбек.канал</div>
+                </div>
+                
+                <div class="checkbox-group">
+                    <input type="checkbox" id="profilePublic" checked>
+                    <label for="profilePublic">Сделать аккаунт общедоступным</label>
+                </div>
+                
+                <div class="form-group">
+                    <label for="customId">Настройте свой ID:</label>
+                    <input type="text" id="customId" placeholder="введите ваш уникальный ID">
                 </div>
                 
                 <div class="form-group">
@@ -1082,7 +1568,7 @@
                 </div>
                 <div class="form-group">
                     <label for="profileBio">О себе</label>
-                    <input type="text" id="profileBio" placeholder="Расскажите о себе">
+                    <textarea id="profileBio" placeholder="Расскажите о себе" rows="3"></textarea>
                 </div>
                 <div class="form-group">
                     <label for="profileLocation">Местоположение</label>
@@ -1093,20 +1579,69 @@
         </div>
     </div>
     
-    <!-- Create Story Modal -->
-    <div class="story-modal" id="storyModal">
-        <div class="story-content">
-            <div class="story-header">
-                <h2>Создать историю</h2>
-                <div class="close-story" id="closeStory">&times;</div>
+    <!-- Family Management Modal -->
+    <div class="modal-overlay" id="familyModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Управление семьей</h2>
+                <div class="close-modal" id="closeFamily">&times;</div>
             </div>
-            <div class="story-body">
+            <div class="modal-body">
+                <div class="search-family-member">
+                    <input type="text" id="familySearchInput" placeholder="Поиск по уникальному ID...">
+                    <button id="searchFamilyMemberBtn">Найти</button>
+                </div>
+                
+                <div id="familySearchResults"></div>
+                
+                <div class="current-family-members">
+                    <h3>Члены семьи</h3>
+                    <div id="familyMembersList">
+                        <!-- Список членов семьи будет здесь -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Accounts Modal -->
+    <div class="modal-overlay" id="accountsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Выберите аккаунт</h2>
+                <div class="close-modal" id="closeAccounts">&times;</div>
+            </div>
+            <div class="modal-body">
+                <div id="accountsList">
+                    <!-- Список аккаунтов будет здесь -->
+                </div>
+                <div class="add-account-btn" id="addAccountBtn">
+                    <i class="fas fa-plus"></i>
+                    <span>Создать новый аккаунт</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Create Story Modal -->
+    <div class="modal-overlay" id="storyModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Создать историю</h2>
+                <div class="close-modal" id="closeStory">&times;</div>
+            </div>
+            <div class="modal-body">
+                <div class="file-upload-area" id="storyUploadArea">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>Перетащите сюда фото или видео для истории</p>
+                    <p>или нажмите для выбора файла</p>
+                </div>
                 <div class="story-preview" id="storyPreview">
                     <div class="story-preview-text">Ваша история будет здесь</div>
                 </div>
-                <input type="file" id="storyUpload" accept="image/*" class="hidden">
+                <input type="file" id="storyUpload" accept="image/*,video/*" class="hidden">
                 <div class="story-actions">
-                    <button class="story-button" id="uploadStoryBtn">Загрузить фото</button>
+                    <button class="story-button secondary" id="uploadStoryBtn">Загрузить фото/видео</button>
                     <button class="story-button" id="publishStoryBtn">Опубликовать</button>
                 </div>
             </div>
@@ -1114,20 +1649,85 @@
     </div>
     
     <!-- Create Post Modal -->
-    <div class="post-modal" id="postModal">
-        <div class="post-content">
-            <div class="post-modal-header">
+    <div class="modal-overlay" id="postModal">
+        <div class="modal-content">
+            <div class="modal-header">
                 <h2>Создать пост</h2>
-                <div class="close-post" id="closePost">&times;</div>
+                <div class="close-modal" id="closePost">&times;</div>
             </div>
-            <div class="post-modal-body">
+            <div class="modal-body">
                 <textarea class="post-modal-text" id="postText" placeholder="Что у вас нового?"></textarea>
                 <img class="post-modal-preview" id="postPreview">
-                <input type="file" id="postUpload" accept="image/*" class="hidden">
+                <video class="post-modal-preview" id="postVideoPreview" controls style="display:none;"></video>
+                <input type="file" id="postUpload" accept="image/*,video/*" class="hidden">
+                
+                <div class="file-upload-area" id="postUploadArea">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>Перетащите сюда фото или видео</p>
+                    <p>или нажмите для выбора файла</p>
+                </div>
+                
+                <div class="post-options">
+                    <div class="post-option">
+                        <input type="checkbox" id="showToNewUsers">
+                        <label for="showToNewUsers">Показать этот пост всем новым пользователям</label>
+                    </div>
+                    <div class="post-option">
+                        <input type="checkbox" id="familyOnly">
+                        <label for="familyOnly">Только для семьи</label>
+                    </div>
+                </div>
                 <div class="post-modal-actions">
-                    <button class="post-modal-button" id="uploadPostImageBtn">Добавить фото</button>
+                    <button class="post-modal-button secondary" id="uploadPostImageBtn">Добавить фото/видео</button>
                     <button class="post-modal-button" id="publishPostBtn">Опубликовать</button>
                 </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Feeling/Activity Modal -->
+    <div class="modal-overlay" id="feelingModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Добавить чувство или действие</h2>
+                <div class="close-modal" id="closeFeeling">&times;</div>
+            </div>
+            <div class="modal-body">
+                <div class="feeling-options">
+                    <div class="feeling-option" data-feeling="happy">
+                        <i class="fas fa-laugh-beam" style="color: #f7b928;"></i>
+                        <span>Счастлив</span>
+                    </div>
+                    <div class="feeling-option" data-feeling="loved">
+                        <i class="fas fa-heart" style="color: #f5533d;"></i>
+                        <span>Влюблен</span>
+                    </div>
+                    <div class="feeling-option" data-feeling="sad">
+                        <i class="fas fa-sad-tear" style="color: #1877f2;"></i>
+                        <span>Грустный</span>
+                    </div>
+                    <div class="feeling-option" data-feeling="excited">
+                        <i class="fas fa-grin-stars" style="color: #45bd62;"></i>
+                        <span>Взволнован</span>
+                    </div>
+                    <div class="feeling-option" data-feeling="blessed">
+                        <i class="fas fa-pray" style="color: #9360f7;"></i>
+                        <span>Благословен</span>
+                    </div>
+                    <div class="feeling-option" data-feeling="grateful">
+                        <i class="fas fa-hands" style="color: #f7b928;"></i>
+                        <span>Благодарен</span>
+                    </div>
+                    <div class="feeling-option" data-feeling="confused">
+                        <i class="fas fa-surprise" style="color: #1877f2;"></i>
+                        <span>В замешательстве</span>
+                    </div>
+                    <div class="feeling-option" data-feeling="cool">
+                        <i class="fas fa-cool" style="color: #45bd62;"></i>
+                        <span>Крутой</span>
+                    </div>
+                </div>
+                <button class="auth-button" id="addFeelingBtn">Добавить к посту</button>
             </div>
         </div>
     </div>
@@ -1142,27 +1742,39 @@
                 </div>
                 
                 <div class="search-bar">
-                    <input type="text" placeholder="Поиск постов и комментариев..." id="searchInput">
+                    <input type="text" placeholder="Поиск по уникальным ID..." id="searchInput">
                     <div class="search-results" id="searchResults"></div>
                 </div>
                 
-                <div class="nav-icons">
-                    <div class="nav-icon active" data-page="home">
-                        <i class="fas fa-home"></i>
+                <div style="display: flex; align-items: center;">
+                    <div class="nav-icons">
+                        <div class="nav-icon active" data-page="home">
+                            <i class="fas fa-home"></i>
+                        </div>
+                        <div class="nav-icon" data-page="friends">
+                            <i class="fas fa-user-friends"></i>
+                        </div>
+                        <div class="nav-icon" data-page="watch">
+                            <i class="fas fa-tv"></i>
+                        </div>
+                        <div class="nav-icon" data-page="marketplace">
+                            <i class="fas fa-store"></i>
+                        </div>
+                        <div class="nav-icon" data-page="notifications">
+                            <i class="fas fa-bell"></i>
+                            <div class="notification-badge">3</div>
+                        </div>
+                        <div class="nav-icon" id="profileBtn">
+                            <i class="fas fa-user"></i>
+                        </div>
                     </div>
-                    <div class="nav-icon" data-page="friends">
-                        <i class="fas fa-user-friends"></i>
+                    
+                    <div class="switch-account-btn" id="switchAccountBtn">
+                        <i class="fas fa-sync-alt"></i>
+                        <span style="margin-left: 5px;">Сменить аккаунт</span>
                     </div>
-                    <div class="nav-icon" data-page="watch">
-                        <i class="fas fa-tv"></i>
-                    </div>
-                    <div class="nav-icon" data-page="groups">
-                        <i class="fas fa-users"></i>
-                    </div>
-                    <div class="nav-icon" data-page="notifications">
-                        <i class="fas fa-bell"></i>
-                    </div>
-                    <div class="user-avatar" id="headerAvatar"></div>
+                    
+                    <div class="user-avatar" id="headerUserAvatar">ИИ</div>
                 </div>
             </div>
         </div>
@@ -1170,159 +1782,167 @@
     
     <!-- Main Content -->
     <div class="container">
-        <div class="main-content" id="mainContent" class="hidden">
-            <!-- Left Sidebar -->
-            <div class="left-sidebar">
-                <div class="sidebar-card">
-                    <div class="user-info">
-                        <div class="avatar" id="sidebarAvatar"></div>
-                        <div class="name" id="sidebarName">Иван Иванов</div>
-                    </div>
-                    
-                    <ul class="sidebar-menu">
-                        <li class="active" data-page="home">
-                            <i class="fas fa-user-friends"></i>
-                            <span>Новости</span>
-                        </li>
-                        <li data-page="friends">
-                            <i class="fas fa-user-friends"></i>
-                            <span>Друзья</span>
-                        </li>
-                        <li data-page="watch">
-                            <i class="fas fa-play-circle"></i>
-                            <span>Watch</span>
-                        </li>
-                        <li data-page="groups">
-                            <i class="fas fa-users"></i>
-                            <span>Группы</span>
-                        </li>
-                        <li data-page="events">
-                            <i class="fas fa-calendar-alt"></i>
-                            <span>События</span>
-                        </li>
-                        <li data-page="memories">
-                            <i class="fas fa-history"></i>
-                            <span>Воспоминания</span>
-                        </li>
-                        <li data-page="saved">
-                            <i class="fas fa-bookmark"></i>
-                            <span>Сохраненное</span>
-                        </li>
-                        <li id="editProfileBtn">
-                            <i class="fas fa-edit"></i>
-                            <span>Редактировать профиль</span>
-                        </li>
-                    </ul>
-                </div>
-                
-                <div class="sidebar-card shortcuts">
-                    <h3>Ваши ярлыки</h3>
-                    <ul class="sidebar-menu">
-                        <li>
-                            <i class="fas fa-code" style="color: #1877f2;"></i>
-                            <span>Разработчики FaceXI</span>
-                        </li>
-                        <li>
-                            <i class="fas fa-graduation-cap" style="color: #f02849;"></i>
-                            <span>Учебная группа</span>
-                        </li>
-                        <li>
-                            <i class="fas fa-gamepad" style="color: #45bd62;"></i>
-                            <span>Игровые новости</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            
-            <!-- Feed -->
-            <div class="feed">
-                <!-- Create Post -->
-                <div class="create-post">
-                    <div class="post-input">
-                        <div class="avatar" id="postInputAvatar"></div>
-                        <input type="text" placeholder="Что у вас нового?" id="openPostModal">
-                    </div>
-                    
-                    <div class="post-actions">
-                        <div class="post-action photo-video" id="openPostModal2">
-                            <i class="fas fa-photo-video"></i>
-                            <span>Фото/Видео</span>
+        <div id="mainContent" class="hidden">
+            <div class="main-content">
+                <!-- Left Sidebar -->
+                <div class="left-sidebar">
+                    <div class="sidebar-card">
+                        <div class="user-info">
+                            <div class="avatar" id="sidebarAvatar">ИИ</div>
+                            <div id="sidebarName">Иван Иванов</div>
                         </div>
-                        <div class="post-action feeling" id="openFeelingModal">
-                            <i class="fas fa-laugh-beam"></i>
-                            <span>Чувства/действия</span>
+                        <ul class="sidebar-menu">
+                            <li class="active">
+                                <i class="fas fa-user-friends"></i>
+                                <span>Друзья</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-users"></i>
+                                <span>Группы</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-store"></i>
+                                <span>Маркетплейс</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-tv"></i>
+                                <span>Watch</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-history"></i>
+                                <span>Воспоминания</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-bookmark"></i>
+                                <span>Сохраненное</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-flag"></i>
+                                <span>Страницы</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-calendar-alt"></i>
+                                <span>События</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="sidebar-card">
+                        <div class="shortcuts">
+                            <h3>Ваши ярлыки</h3>
+                            <ul class="sidebar-menu">
+                                <li>
+                                    <i class="fas fa-gamepad" style="color: #45bd62;"></i>
+                                    <span>Игры</span>
+                                </li>
+                                <li>
+                                    <i class="fas fa-film" style="color: #f7b928;"></i>
+                                    <span>Фильмы</span>
+                                </li>
+                                <li>
+                                    <i class="fas fa-music" style="color: #f5533d;"></i>
+                                    <span>Музыка</span>
+                                </li>
+                                <li>
+                                    <i class="fas fa-newspaper" style="color: #1877f2;"></i>
+                                    <span>Новости</span>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>
                 
-                <!-- Stories -->
-                <div class="stories" id="storiesContainer">
-                    <div class="story" id="createStoryBtn">
-                        <div class="story-bg" style="background-color: #f0f2f5;"></div>
-                        <div class="create-story">
-                            <div class="plus">
-                                <i class="fas fa-plus"></i>
+                <!-- Feed -->
+                <div class="feed">
+                    <!-- Family Section -->
+                    <div class="family-section">
+                        <div class="section-header">
+                            <div class="section-title">Моя семья</div>
+                            <div class="add-family-btn" id="openFamilyModal">+ Добавить</div>
+                        </div>
+                        <div class="family-members" id="familyMembersContainer">
+                            <!-- Члены семьи будут загружены здесь -->
+                        </div>
+                    </div>
+                    
+                    <!-- Create Post -->
+                    <div class="create-post">
+                        <div class="post-input">
+                            <div class="avatar" id="postInputAvatar">ИИ</div>
+                            <input type="text" placeholder="Что у вас нового?" id="openPostModalInput">
+                        </div>
+                        <div class="post-options" id="mainPostOptions">
+                            <div class="post-option">
+                                <input type="checkbox" id="showToNewUsersMain">
+                                <label for="showToNewUsersMain">Показать этот пост всем новым пользователям</label>
                             </div>
-                            <div class="text">Создать историю</div>
+                            <div class="post-option">
+                                <input type="checkbox" id="familyOnlyMain">
+                                <label for="familyOnlyMain">Только для семьи</label>
+                            </div>
+                        </div>
+                        <div class="post-actions">
+                            <div class="post-action photo-video" id="openPostModal2">
+                                <i class="fas fa-photo-video"></i>
+                                <span>Фото/Видео</span>
+                            </div>
+                            <div class="post-action feeling" id="openFeelingModal">
+                                <i class="fas fa-laugh-beam"></i>
+                                <span>Чувства/действия</span>
+                            </div>
+                            <div class="post-action live" id="openLiveModal">
+                                <i class="fas fa-video"></i>
+                                <span>Прямой эфир</span>
+                            </div>
                         </div>
                     </div>
                     
-                    <!-- Stories will be loaded here -->
-                </div>
-                
-                <!-- Posts -->
-                <div id="postsContainer">
-                    <!-- Posts will be loaded here -->
-                </div>
-            </div>
-            
-            <!-- Right Sidebar -->
-            <div class="right-sidebar">
-                <div class="sidebar-card contacts">
-                    <h3>Контакты</h3>
-                    
-                    <div class="contact">
-                        <div class="avatar" style="background-image: url('https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60');"></div>
-                        <div class="name">Мария Семенова</div>
+                    <!-- Stories -->
+                    <div class="stories" id="storiesContainer">
+                        <div class="story" id="createStoryBtn">
+                            <div class="story-bg" style="background-color: #f0f2f5;"></div>
+                            <div class="create-story">
+                                <div class="plus">
+                                    <i class="fas fa-plus"></i>
+                                </div>
+                                <div class="text">Создать историю</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Stories will be loaded here -->
                     </div>
                     
-                    <div class="contact">
-                        <div class="avatar" style="background-image: url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60');"></div>
-                        <div class="name">Андрей Петров</div>
-                    </div>
-                    
-                    <div class="contact">
-                        <div class="avatar" style="background-image: url('https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60');"></div>
-                        <div class="name">Ольга Козлова</div>
-                    </div>
-                    
-                    <div class="contact">
-                        <div class="avatar" style="background-image: url('https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60');"></div>
-                        <div class="name">Дмитрий Иванов</div>
-                    </div>
-                    
-                    <div class="contact">
-                        <div class="avatar" style="background-image: url('https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60');"></div>
-                        <div class="name">Елена Смирнова</div>
+                    <!-- Posts -->
+                    <div id="postsContainer">
+                        <!-- Posts will be loaded here -->
                     </div>
                 </div>
                 
-                <div class="sidebar-card">
-                    <h3>Группы FaceXI</h3>
-                    
-                    <div class="contact">
-                        <div class="avatar" style="background-color: #f7b928;">Т</div>
-                        <div class="name">Путешествия по миру</div>
+                <!-- Right Sidebar -->
+                <div class="right-sidebar">
+                    <div class="sidebar-card">
+                        <h3>Контакты</h3>
+                        <div class="contacts" id="contactsList">
+                            <!-- Контакты будут загружены здесь -->
+                        </div>
                     </div>
                     
-                    <div class="contact">
-                        <div class="avatar" style="background-color: #45bd62;">Ф</div>
-                        <div class="name">Фотография</div>
-                    </div>
-                    
-                    <div class="contact">
-                        <div class="avatar" style="background-color: #1877f2;">П</div>
-                        <div class="name">Программирование</div>
+                    <div class="sidebar-card">
+                        <h3>Рекомендации</h3>
+                        <div class="contacts">
+                            <div class="contact">
+                                <div class="avatar">АП</div>
+                                <div>Андрей Петров</div>
+                            </div>
+                            <div class="contact">
+                                <div class="avatar">МС</div>
+                                <div>Мария Сидорова</div>
+                            </div>
+                            <div class="contact">
+                                <div class="avatar">ДК</div>
+                                <div>Дмитрий Козлов</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1330,7 +1950,7 @@
     </div>
 
     <script>
-        // Имитация облачного хранилища
+        // Класс облачного хранилища
         class CloudStorage {
             constructor() {
                 this.storageKey = 'facexi_cloud_data';
@@ -1338,43 +1958,34 @@
             }
             
             init() {
-                // Инициализируем облачное хранилище в localStorage
                 if (!localStorage.getItem(this.storageKey)) {
                     const initialData = {
                         users: [],
                         posts: [],
                         stories: [],
+                        contacts: [],
                         lastUpdate: new Date().toISOString()
                     };
                     localStorage.setItem(this.storageKey, JSON.stringify(initialData));
                 }
             }
             
-            // Получить все данные
             getAllData() {
                 const data = localStorage.getItem(this.storageKey);
                 return data ? JSON.parse(data) : null;
             }
             
-            // Сохранить все данные
             saveAllData(data) {
                 data.lastUpdate = new Date().toISOString();
                 localStorage.setItem(this.storageKey, JSON.stringify(data));
-                
-                // Имитируем синхронизацию с "облаком"
                 this.simulateSync();
             }
             
-            // Имитация синхронизации между устройствами
             simulateSync() {
-                // В реальном приложении здесь был бы запрос к серверу
                 console.log('Данные синхронизированы с облаком');
-                
-                // Показываем сообщение о синхронизации
                 this.showStatus('Данные синхронизированы с облаком');
             }
             
-            // Показать статус
             showStatus(message) {
                 const statusElement = document.getElementById('statusMessage');
                 statusElement.textContent = message;
@@ -1385,58 +1996,65 @@
                 }, 3000);
             }
             
-            // Получить пользователей
             getUsers() {
                 const data = this.getAllData();
                 return data ? data.users : [];
             }
             
-            // Сохранить пользователей
             saveUsers(users) {
                 const data = this.getAllData();
                 data.users = users;
                 this.saveAllData(data);
             }
             
-            // Получить посты
             getPosts() {
                 const data = this.getAllData();
                 return data ? data.posts : [];
             }
             
-            // Сохранить посты
             savePosts(posts) {
                 const data = this.getAllData();
                 data.posts = posts;
                 this.saveAllData(data);
             }
             
-            // Получить истории
             getStories() {
                 const data = this.getAllData();
                 return data ? data.stories : [];
             }
             
-            // Сохранить истории
             saveStories(stories) {
                 const data = this.getAllData();
                 data.stories = stories;
                 this.saveAllData(data);
             }
             
-            // Найти пользователя по email
+            getContacts() {
+                const data = this.getAllData();
+                return data ? data.contacts : [];
+            }
+            
+            saveContacts(contacts) {
+                const data = this.getAllData();
+                data.contacts = contacts;
+                this.saveAllData(data);
+            }
+            
             findUserByEmail(email) {
                 const users = this.getUsers();
                 return users.find(user => user.email === email);
             }
             
-            // Найти пользователя по ID
             findUserById(id) {
                 const users = this.getUsers();
                 return users.find(user => user.id === id);
             }
             
-            // Добавить пользователя
+            findUserByUniqueId(uniqueId) {
+                const users = this.getUsers();
+                return users.find(user => user.uniqueId === uniqueId);
+            }
+            
             addUser(user) {
                 const users = this.getUsers();
                 users.push(user);
@@ -1444,7 +2062,6 @@
                 return user;
             }
             
-            // Обновить пользователя
             updateUser(updatedUser) {
                 const users = this.getUsers();
                 const index = users.findIndex(user => user.id === updatedUser.id);
@@ -1456,7 +2073,6 @@
                 return false;
             }
             
-            // Добавить пост
             addPost(post) {
                 const posts = this.getPosts();
                 posts.unshift(post);
@@ -1464,7 +2080,6 @@
                 return post;
             }
             
-            // Обновить пост
             updatePost(updatedPost) {
                 const posts = this.getPosts();
                 const index = posts.findIndex(post => post.id === updatedPost.id);
@@ -1476,7 +2091,6 @@
                 return false;
             }
             
-            // Добавить историю
             addStory(story) {
                 const stories = this.getStories();
                 stories.unshift(story);
@@ -1484,57 +2098,29 @@
                 return story;
             }
             
-            // Поиск по постам и комментариям
-            searchPosts(query) {
-                const posts = this.getPosts();
-                const results = [];
-                
-                if (!query.trim()) return results;
-                
-                const searchTerm = query.toLowerCase();
-                
-                posts.forEach(post => {
-                    // Поиск по тексту поста
-                    if (post.text && post.text.toLowerCase().includes(searchTerm)) {
-                        results.push({
-                            type: 'post',
-                            id: post.id,
-                            text: post.text,
-                            userName: post.userName,
-                            timestamp: post.timestamp
-                        });
-                    }
-                    
-                    // Поиск по комментариям
-                    if (post.comments && post.comments.length > 0) {
-                        post.comments.forEach(comment => {
-                            if (comment.text && comment.text.toLowerCase().includes(searchTerm)) {
-                                results.push({
-                                    type: 'comment',
-                                    id: comment.id,
-                                    text: comment.text,
-                                    userName: comment.userName,
-                                    postId: post.id,
-                                    timestamp: comment.timestamp
-                                });
-                            }
-                        });
-                    }
-                });
-                
-                return results;
+            searchUsers(query) {
+                const users = this.getUsers();
+                return users.filter(user => 
+                    user.isPublic && 
+                    (user.uniqueId.toLowerCase().includes(query.toLowerCase()) ||
+                     user.name.toLowerCase().includes(query.toLowerCase()))
+                );
             }
         }
         
         // Данные приложения
         const cloudStorage = new CloudStorage();
         let currentUser = null;
+        let availableAccounts = [];
         
         // DOM элементы
         const authModal = document.getElementById('authModal');
         const profileModal = document.getElementById('profileModal');
+        const familyModal = document.getElementById('familyModal');
+        const accountsModal = document.getElementById('accountsModal');
         const storyModal = document.getElementById('storyModal');
         const postModal = document.getElementById('postModal');
+        const feelingModal = document.getElementById('feelingModal');
         const mainHeader = document.getElementById('mainHeader');
         const mainContent = document.getElementById('mainContent');
         const postsContainer = document.getElementById('postsContainer');
@@ -1544,11 +2130,12 @@
         
         // Инициализация приложения
         document.addEventListener('DOMContentLoaded', function() {
-            // Проверяем, есть ли активный пользователь
+            // Загружаем доступные аккаунты
+            loadAvailableAccounts();
+            
             const savedUser = localStorage.getItem('facexi_current_user');
             if (savedUser) {
                 const userData = JSON.parse(savedUser);
-                // Ищем пользователя в облачном хранилище
                 const user = cloudStorage.findUserById(userData.id);
                 if (user) {
                     currentUser = user;
@@ -1560,11 +2147,42 @@
                 showAuthModal();
             }
             
-            // Инициализация обработчиков событий
             initEventListeners();
             loadPosts();
             loadStories();
+            loadFamilyMembers();
+            loadContacts();
         });
+        
+        // Загрузка доступных аккаунтов
+        function loadAvailableAccounts() {
+            const savedAccounts = localStorage.getItem('facexi_available_accounts');
+            if (savedAccounts) {
+                availableAccounts = JSON.parse(savedAccounts);
+            } else {
+                availableAccounts = [];
+            }
+        }
+        
+        // Сохранение доступных аккаунтов
+        function saveAvailableAccounts() {
+            localStorage.setItem('facexi_available_accounts', JSON.stringify(availableAccounts));
+        }
+        
+        // Добавление аккаунта в список доступных
+        function addAccountToAvailable(user) {
+            // Проверяем, нет ли уже этого аккаунта в списке
+            const existingAccount = availableAccounts.find(acc => acc.id === user.id);
+            if (!existingAccount) {
+                availableAccounts.push({
+                    id: user.id,
+                    name: user.name,
+                    uniqueId: user.uniqueId,
+                    avatar: user.avatar
+                });
+                saveAvailableAccounts();
+            }
+        }
         
         // Показать модальное окно авторизации
         function showAuthModal() {
@@ -1585,32 +2203,74 @@
         function updateUserInterface() {
             if (!currentUser) return;
             
-            // Обновление аватаров
-            const avatars = document.querySelectorAll('.avatar, .user-avatar');
-            avatars.forEach(avatar => {
-                if (currentUser.avatar) {
-                    avatar.style.backgroundImage = `url(${currentUser.avatar})`;
-                    avatar.textContent = '';
-                } else {
-                    avatar.style.backgroundImage = '';
-                    avatar.textContent = currentUser.name.split(' ').map(n => n[0]).join('');
-                }
-            });
+            // Обновляем аватар в хедере
+            const headerAvatar = document.getElementById('headerUserAvatar');
+            if (currentUser.avatar) {
+                headerAvatar.style.backgroundImage = `url(${currentUser.avatar})`;
+                headerAvatar.textContent = '';
+            } else {
+                headerAvatar.style.backgroundImage = '';
+                headerAvatar.textContent = currentUser.name.split(' ').map(n => n[0]).join('');
+            }
             
-            // Обновление имени
-            const nameElements = document.querySelectorAll('.name, #sidebarName');
-            nameElements.forEach(element => {
-                element.textContent = currentUser.name;
-                // Добавляем значок верификации, если пользователь верифицирован
-                if (currentUser.isVerified) {
-                    if (!element.querySelector('.verified-badge')) {
-                        const verifiedBadge = document.createElement('span');
-                        verifiedBadge.className = 'verified-badge';
-                        verifiedBadge.innerHTML = '<i class="fas fa-check-circle"></i>';
-                        element.appendChild(verifiedBadge);
-                    }
-                }
-            });
+            // Обновляем аватар в сайдбаре
+            const sidebarAvatar = document.getElementById('sidebarAvatar');
+            if (currentUser.avatar) {
+                sidebarAvatar.style.backgroundImage = `url(${currentUser.avatar})`;
+                sidebarAvatar.textContent = '';
+            } else {
+                sidebarAvatar.style.backgroundImage = '';
+                sidebarAvatar.textContent = currentUser.name.split(' ').map(n => n[0]).join('');
+            }
+            
+            // Обновляем имя в сайдбаре
+            document.getElementById('sidebarName').textContent = currentUser.name;
+            
+            // Обновляем аватар в создании поста
+            const postInputAvatar = document.getElementById('postInputAvatar');
+            if (currentUser.avatar) {
+                postInputAvatar.style.backgroundImage = `url(${currentUser.avatar})`;
+                postInputAvatar.textContent = '';
+            } else {
+                postInputAvatar.style.backgroundImage = '';
+                postInputAvatar.textContent = currentUser.name.split(' ').map(n => n[0]).join('');
+            }
+            
+            // Обновляем профиль
+            document.getElementById('profileAvatar').textContent = currentUser.name.split(' ').map(n => n[0]).join('');
+            if (currentUser.avatar) {
+                document.getElementById('profileAvatar').style.backgroundImage = `url(${currentUser.avatar})`;
+                document.getElementById('profileAvatar').textContent = '';
+            }
+            
+            document.getElementById('profileNameDisplay').textContent = currentUser.name;
+            document.getElementById('uniqueId').textContent = currentUser.uniqueId;
+            document.getElementById('customId').value = currentUser.uniqueId;
+            document.getElementById('profilePublic').checked = currentUser.isPublic;
+            document.getElementById('profileName').value = currentUser.name;
+            document.getElementById('profileBio').value = currentUser.bio || '';
+            document.getElementById('profileLocation').value = currentUser.location || '';
+        }
+        
+        // Генерация уникального ID
+        function generateUniqueId(name) {
+            const translit = {
+                'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd',
+                'е': 'e', 'ё': 'yo', 'ж': 'zh', 'з': 'z', 'и': 'i',
+                'й': 'y', 'к': 'k', 'л': 'l', 'м': 'm', 'н': 'n',
+                'о': 'o', 'п': 'p', 'р': 'r', 'с': 's', 'т': 't',
+                'у': 'u', 'ф': 'f', 'х': 'h', 'ц': 'ts', 'ч': 'ch',
+                'ш': 'sh', 'щ': 'sch', 'ъ': '', 'ы': 'y', 'ь': '',
+                'э': 'e', 'ю': 'yu', 'я': 'ya'
+            };
+            
+            let result = '';
+            for (let char of name.toLowerCase()) {
+                result += translit[char] || char;
+            }
+            
+            const randomSuffix = Math.random().toString(36).substring(2, 6);
+            return result + '-' + randomSuffix + '.канал';
         }
         
         // Инициализация обработчиков событий
@@ -1621,7 +2281,6 @@
                 authModal.style.display = 'none';
             });
             
-            // Переключение между вкладками авторизации
             document.querySelectorAll('.auth-tab').forEach(tab => {
                 tab.addEventListener('click', function() {
                     document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
@@ -1642,6 +2301,7 @@
                 if (user && user.password === password) {
                     currentUser = user;
                     localStorage.setItem('facexi_current_user', JSON.stringify(currentUser));
+                    addAccountToAvailable(user);
                     showMainApp();
                 } else {
                     alert('Неверный email или пароль');
@@ -1656,50 +2316,42 @@
                 const password = document.getElementById('registerPassword').value;
                 const birthday = document.getElementById('registerBirthday').value;
                 const gender = document.getElementById('registerGender').value;
-                const hasCompany = document.getElementById('registerHasCompany').checked;
+                const isPublic = document.getElementById('makePublic').checked;
                 
-                // Проверяем, есть ли уже пользователь с таким email
                 if (cloudStorage.findUserByEmail(email)) {
                     alert('Пользователь с таким email уже существует');
                     return;
                 }
+                
+                const uniqueId = generateUniqueId(name);
                 
                 const newUser = {
                     id: Date.now(),
                     name,
                     email,
                     password,
+                    uniqueId,
+                    isPublic,
                     birthday,
                     gender,
                     avatar: null,
                     bio: '',
                     location: '',
-                    isVerified: hasCompany // Верифицируем, если есть компания
+                    registrationDate: new Date().toISOString(),
+                    family: []
                 };
                 
                 cloudStorage.addUser(newUser);
                 
                 currentUser = newUser;
                 localStorage.setItem('facexi_current_user', JSON.stringify(currentUser));
+                addAccountToAvailable(newUser);
                 
                 showMainApp();
             });
             
             // Профиль
-            document.getElementById('editProfileBtn').addEventListener('click', () => {
-                document.getElementById('profileName').value = currentUser.name;
-                document.getElementById('profileBio').value = currentUser.bio || '';
-                document.getElementById('profileLocation').value = currentUser.location || '';
-                
-                const avatarPreview = document.getElementById('profileAvatarPreview');
-                if (currentUser.avatar) {
-                    avatarPreview.style.backgroundImage = `url(${currentUser.avatar})`;
-                    avatarPreview.textContent = '';
-                } else {
-                    avatarPreview.style.backgroundImage = '';
-                    avatarPreview.textContent = currentUser.name.split(' ').map(n => n[0]).join('');
-                }
-                
+            document.getElementById('profileBtn').addEventListener('click', () => {
                 profileModal.style.display = 'flex';
             });
             
@@ -1707,35 +2359,207 @@
                 profileModal.style.display = 'none';
             });
             
-            document.getElementById('changeAvatar').addEventListener('click', () => {
-                document.getElementById('avatarUpload').click();
-            });
-            
-            document.getElementById('avatarUpload').addEventListener('change', function(e) {
-                if (e.target.files && e.target.files[0]) {
-                    const reader = new FileReader();
-                    reader.onload = function(event) {
-                        currentUser.avatar = event.target.result;
-                        document.getElementById('profileAvatarPreview').style.backgroundImage = `url(${event.target.result})`;
-                        document.getElementById('profileAvatarPreview').textContent = '';
-                        updateUserInterface();
-                    };
-                    reader.readAsDataURL(e.target.files[0]);
-                }
-            });
-            
             document.getElementById('saveProfile').addEventListener('click', () => {
-                currentUser.name = document.getElementById('profileName').value;
-                currentUser.bio = document.getElementById('profileBio').value;
-                currentUser.location = document.getElementById('profileLocation').value;
+                const customId = document.getElementById('customId').value;
+                const isPublic = document.getElementById('profilePublic').checked;
+                const name = document.getElementById('profileName').value;
+                const bio = document.getElementById('profileBio').value;
+                const location = document.getElementById('profileLocation').value;
                 
-                // Обновляем пользователя в облачном хранилище
+                if (customId && customId !== currentUser.uniqueId) {
+                    if (cloudStorage.findUserByUniqueId(customId)) {
+                        alert('Этот ID уже занят');
+                        return;
+                    }
+                    
+                    currentUser.uniqueId = customId;
+                }
+                
+                currentUser.isPublic = isPublic;
+                currentUser.name = name;
+                currentUser.bio = bio;
+                currentUser.location = location;
+                
                 cloudStorage.updateUser(currentUser);
                 localStorage.setItem('facexi_current_user', JSON.stringify(currentUser));
                 updateUserInterface();
                 profileModal.style.display = 'none';
                 
-                cloudStorage.showStatus('Профиль обновлен и синхронизирован');
+                cloudStorage.showStatus('Профиль обновлен!');
+            });
+            
+            // Управление семьей
+            document.getElementById('manageFamilyBtn').addEventListener('click', () => {
+                familyModal.style.display = 'flex';
+                updateFamilyMembersList();
+            });
+            
+            document.getElementById('openFamilyModal').addEventListener('click', () => {
+                familyModal.style.display = 'flex';
+                updateFamilyMembersList();
+            });
+            
+            document.getElementById('closeFamily').addEventListener('click', () => {
+                familyModal.style.display = 'none';
+            });
+            
+            document.getElementById('searchFamilyMemberBtn').addEventListener('click', searchFamilyMember);
+            
+            document.getElementById('familySearchInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchFamilyMember();
+                }
+            });
+            
+            // Переключение аккаунтов
+            document.getElementById('switchAccountBtn').addEventListener('click', showAccountsModal);
+            
+            document.getElementById('closeAccounts').addEventListener('click', () => {
+                accountsModal.style.display = 'none';
+            });
+            
+            document.getElementById('addAccountBtn').addEventListener('click', () => {
+                accountsModal.style.display = 'none';
+                showAuthModal();
+            });
+            
+            // Создание поста
+            document.getElementById('openPostModalInput').addEventListener('click', () => {
+                postModal.style.display = 'flex';
+            });
+            
+            document.getElementById('openPostModal2').addEventListener('click', () => {
+                postModal.style.display = 'flex';
+            });
+            
+            document.getElementById('closePost').addEventListener('click', () => {
+                postModal.style.display = 'none';
+            });
+            
+            document.getElementById('uploadPostImageBtn').addEventListener('click', () => {
+                document.getElementById('postUpload').click();
+            });
+            
+            document.getElementById('postUploadArea').addEventListener('click', () => {
+                document.getElementById('postUpload').click();
+            });
+            
+            document.getElementById('postUpload').addEventListener('change', function(e) {
+                if (e.target.files && e.target.files[0]) {
+                    const file = e.target.files[0];
+                    const reader = new FileReader();
+                    
+                    reader.onload = function(event) {
+                        if (file.type.startsWith('image/')) {
+                            document.getElementById('postPreview').src = event.target.result;
+                            document.getElementById('postPreview').style.display = 'block';
+                            document.getElementById('postVideoPreview').style.display = 'none';
+                        } else if (file.type.startsWith('video/')) {
+                            document.getElementById('postVideoPreview').src = event.target.result;
+                            document.getElementById('postVideoPreview').style.display = 'block';
+                            document.getElementById('postPreview').style.display = 'none';
+                        }
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            document.getElementById('publishPostBtn').addEventListener('click', () => {
+                const postText = document.getElementById('postText').value;
+                const postImage = document.getElementById('postPreview').style.display !== 'none' ? 
+                    document.getElementById('postPreview').src : null;
+                const postVideo = document.getElementById('postVideoPreview').style.display !== 'none' ? 
+                    document.getElementById('postVideoPreview').src : null;
+                const showToNewUsers = document.getElementById('showToNewUsers').checked;
+                const familyOnly = document.getElementById('familyOnly').checked;
+                
+                if (postText.trim() === '' && !postImage && !postVideo) {
+                    alert('Пожалуйста, добавьте текст, изображение или видео к посту');
+                    return;
+                }
+                
+                const newPost = {
+                    id: Date.now(),
+                    userId: currentUser.id,
+                    userName: currentUser.name,
+                    userAvatar: currentUser.avatar,
+                    text: postText,
+                    image: postImage,
+                    video: postVideo,
+                    showToNewUsers: showToNewUsers,
+                    familyOnly: familyOnly,
+                    likes: [],
+                    comments: [],
+                    timestamp: new Date().toISOString()
+                };
+                
+                cloudStorage.addPost(newPost);
+                loadPosts();
+                postModal.style.display = 'none';
+                
+                // Сброс формы
+                document.getElementById('postText').value = '';
+                document.getElementById('postPreview').src = '';
+                document.getElementById('postPreview').style.display = 'none';
+                document.getElementById('postVideoPreview').src = '';
+                document.getElementById('postVideoPreview').style.display = 'none';
+                document.getElementById('showToNewUsers').checked = false;
+                document.getElementById('familyOnly').checked = false;
+                
+                cloudStorage.showStatus('Пост опубликован и синхронизирован');
+            });
+            
+            // Создание поста из главной страницы
+            document.getElementById('openPostModalInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && this.value.trim() !== '') {
+                    const postText = this.value;
+                    const showToNewUsers = document.getElementById('showToNewUsersMain').checked;
+                    const familyOnly = document.getElementById('familyOnlyMain').checked;
+                    
+                    const newPost = {
+                        id: Date.now(),
+                        userId: currentUser.id,
+                        userName: currentUser.name,
+                        userAvatar: currentUser.avatar,
+                        text: postText,
+                        image: null,
+                        video: null,
+                        showToNewUsers: showToNewUsers,
+                        familyOnly: familyOnly,
+                        likes: [],
+                        comments: [],
+                        timestamp: new Date().toISOString()
+                    };
+                    
+                    cloudStorage.addPost(newPost);
+                    loadPosts();
+                    
+                    this.value = '';
+                    document.getElementById('showToNewUsersMain').checked = false;
+                    document.getElementById('familyOnlyMain').checked = false;
+                    
+                    cloudStorage.showStatus('Пост опубликован и синхронизирован');
+                }
+            });
+            
+            // Чувства/действия
+            document.getElementById('openFeelingModal').addEventListener('click', () => {
+                feelingModal.style.display = 'flex';
+            });
+            
+            document.getElementById('closeFeeling').addEventListener('click', () => {
+                feelingModal.style.display = 'none';
+            });
+            
+            document.querySelectorAll('.feeling-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    const feeling = this.dataset.feeling;
+                    const feelingText = this.querySelector('span').textContent;
+                    
+                    document.getElementById('postText').value = `Чувствую себя ${feelingText.toLowerCase()} ${document.getElementById('postText').value}`;
+                    feelingModal.style.display = 'none';
+                    postModal.style.display = 'flex';
+                });
             });
             
             // Создание истории
@@ -1748,6 +2572,10 @@
             });
             
             document.getElementById('uploadStoryBtn').addEventListener('click', () => {
+                document.getElementById('storyUpload').click();
+            });
+            
+            document.getElementById('storyUploadArea').addEventListener('click', () => {
                 document.getElementById('storyUpload').click();
             });
             
@@ -1772,7 +2600,7 @@
                         userId: currentUser.id,
                         userName: currentUser.name,
                         userAvatar: currentUser.avatar,
-                        image: backgroundImage.slice(5, -2), // Извлекаем URL из backgroundImage
+                        image: backgroundImage.slice(5, -2),
                         timestamp: new Date().toISOString()
                     };
                     
@@ -1780,7 +2608,6 @@
                     loadStories();
                     storyModal.style.display = 'none';
                     
-                    // Сброс превью
                     storyPreview.style.backgroundImage = 'none';
                     storyPreview.textContent = 'Ваша история будет здесь';
                     
@@ -1790,82 +2617,15 @@
                 }
             });
             
-            // Создание поста
-            document.getElementById('openPostModal').addEventListener('click', () => {
-                postModal.style.display = 'flex';
-            });
-            
-            document.getElementById('openPostModal2').addEventListener('click', () => {
-                postModal.style.display = 'flex';
-            });
-            
-            document.getElementById('closePost').addEventListener('click', () => {
-                postModal.style.display = 'none';
-            });
-            
-            document.getElementById('uploadPostImageBtn').addEventListener('click', () => {
-                document.getElementById('postUpload').click();
-            });
-            
-            document.getElementById('postUpload').addEventListener('change', function(e) {
-                if (e.target.files && e.target.files[0]) {
-                    const reader = new FileReader();
-                    reader.onload = function(event) {
-                        document.getElementById('postPreview').src = event.target.result;
-                        document.getElementById('postPreview').style.display = 'block';
-                    };
-                    reader.readAsDataURL(e.target.files[0]);
-                }
-            });
-            
-            document.getElementById('publishPostBtn').addEventListener('click', () => {
-                const postText = document.getElementById('postText').value;
-                const postImage = document.getElementById('postPreview').src;
-                
-                if (postText.trim() === '' && postImage === '') {
-                    alert('Пожалуйста, добавьте текст или изображение к посту');
-                    return;
-                }
-                
-                const newPost = {
-                    id: Date.now(),
-                    userId: currentUser.id,
-                    userName: currentUser.name,
-                    userAvatar: currentUser.avatar,
-                    text: postText,
-                    image: postImage !== '' ? postImage : null,
-                    likes: [],
-                    comments: [],
-                    timestamp: new Date().toISOString()
-                };
-                
-                cloudStorage.addPost(newPost);
-                loadPosts();
-                postModal.style.display = 'none';
-                
-                // Сброс формы
-                document.getElementById('postText').value = '';
-                document.getElementById('postPreview').src = '';
-                document.getElementById('postPreview').style.display = 'none';
-                
-                cloudStorage.showStatus('Пост опубликован и синхронизирован');
-            });
-            
             // Навигация
-            document.querySelectorAll('.nav-icon, .sidebar-menu li').forEach(element => {
+            document.querySelectorAll('.nav-icon').forEach(element => {
                 if (element.dataset.page) {
                     element.addEventListener('click', function() {
-                        // Убираем активный класс у всех элементов
                         document.querySelectorAll('.nav-icon').forEach(icon => icon.classList.remove('active'));
-                        document.querySelectorAll('.sidebar-menu li').forEach(li => li.classList.remove('active'));
-                        
-                        // Добавляем активный класс к текущему элементу
                         this.classList.add('active');
                         
-                        // Здесь можно добавить логику для переключения страниц
-                        // В этом примере мы просто показываем уведомление
                         if (this.dataset.page !== 'home') {
-                            alert(`Раздел "${this.dataset.page}" находится в разработке`);
+                            cloudStorage.showStatus(`Раздел "${this.dataset.page}" находится в разработке`);
                         }
                     });
                 }
@@ -1875,14 +2635,13 @@
             searchInput.addEventListener('input', function() {
                 const query = this.value.trim();
                 if (query.length > 0) {
-                    const results = cloudStorage.searchPosts(query);
+                    const results = cloudStorage.searchUsers(query);
                     displaySearchResults(results);
                 } else {
                     searchResults.style.display = 'none';
                 }
             });
             
-            // Закрытие результатов поиска при клике вне области
             document.addEventListener('click', function(e) {
                 if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
                     searchResults.style.display = 'none';
@@ -1895,37 +2654,23 @@
             searchResults.innerHTML = '';
             
             if (results.length === 0) {
-                searchResults.innerHTML = '<div class="search-result-item">Ничего не найдено</div>';
+                searchResults.innerHTML = '<div class="search-result-item">Пользователи не найдены</div>';
             } else {
-                results.forEach(result => {
+                results.forEach(user => {
                     const item = document.createElement('div');
                     item.className = 'search-result-item';
-                    
-                    let content = '';
-                    if (result.type === 'post') {
-                        content = `
-                            <div><strong>${result.userName}</strong>: ${result.text}</div>
-                            <small>${formatTime(result.timestamp)}</small>
-                        `;
-                    } else if (result.type === 'comment') {
-                        content = `
-                            <div><strong>${result.userName}</strong> (комментарий): ${result.text}</div>
-                            <small>${formatTime(result.timestamp)}</small>
-                        `;
-                    }
-                    
-                    item.innerHTML = content;
+                    item.innerHTML = `
+                        <div class="search-result-avatar" style="${user.avatar ? `background-image: url(${user.avatar})` : ''}">
+                            ${!user.avatar ? user.name.split(' ').map(n => n[0]).join('') : ''}
+                        </div>
+                        <div>
+                            <div><strong>${user.name}</strong></div>
+                            <small>${user.uniqueId}</small>
+                        </div>
+                    `;
                     item.addEventListener('click', function() {
-                        // Показываем пост с найденным комментарием
-                        if (result.type === 'comment') {
-                            showPostWithComment(result.postId, result.id);
-                        } else {
-                            showPost(result.id);
-                        }
-                        searchResults.style.display = 'none';
-                        searchInput.value = '';
+                        viewUserProfile(user);
                     });
-                    
                     searchResults.appendChild(item);
                 });
             }
@@ -1933,33 +2678,240 @@
             searchResults.style.display = 'block';
         }
         
-        // Показать пост
-        function showPost(postId) {
-            // Прокручиваем к посту
-            const postElement = document.querySelector(`[data-post-id="${postId}"]`);
-            if (postElement) {
-                postElement.scrollIntoView({ behavior: 'smooth' });
-                // Можно добавить подсветку поста
-                postElement.style.boxShadow = '0 0 0 2px var(--primary)';
-                setTimeout(() => {
-                    postElement.style.boxShadow = '';
-                }, 2000);
+        // Просмотр профиля пользователя
+        function viewUserProfile(user) {
+            alert(`Профиль пользователя: ${user.name}\nУникальный ID: ${user.uniqueId}\n\nЗдесь можно просмотреть посты, истории и другую информацию`);
+        }
+        
+        // Переключение на другой аккаунт
+        function switchAccount(accountId) {
+            const user = cloudStorage.findUserById(accountId);
+            if (user) {
+                currentUser = user;
+                localStorage.setItem('facexi_current_user', JSON.stringify(currentUser));
+                updateUserInterface();
+                loadPosts();
+                loadStories();
+                loadFamilyMembers();
+                accountsModal.style.display = 'none';
+                cloudStorage.showStatus(`Переключено на аккаунт: ${user.name}`);
             }
         }
         
-        // Показать пост с комментарием
-        function showPostWithComment(postId, commentId) {
-            showPost(postId);
-            // Дополнительно можно подсветить комментарий
-            setTimeout(() => {
-                const commentElement = document.querySelector(`[data-comment-id="${commentId}"]`);
-                if (commentElement) {
-                    commentElement.style.backgroundColor = '#fffacd';
-                    setTimeout(() => {
-                        commentElement.style.backgroundColor = '';
-                    }, 2000);
+        // Показать модальное окно переключения аккаунтов
+        function showAccountsModal() {
+            const accountsList = document.getElementById('accountsList');
+            accountsList.innerHTML = '';
+            
+            // Добавляем текущий аккаунт
+            if (currentUser) {
+                const currentAccountElement = document.createElement('div');
+                currentAccountElement.className = 'account-item active';
+                currentAccountElement.innerHTML = `
+                    <div class="account-avatar" style="${currentUser.avatar ? `background-image: url(${currentUser.avatar})` : ''}">
+                        ${!currentUser.avatar ? currentUser.name.split(' ').map(n => n[0]).join('') : ''}
+                    </div>
+                    <div class="account-info">
+                        <div class="account-name">${currentUser.name}</div>
+                        <div class="account-id">${currentUser.uniqueId}</div>
+                    </div>
+                    <div style="color: var(--primary);">
+                        <i class="fas fa-check"></i>
+                    </div>
+                `;
+                accountsList.appendChild(currentAccountElement);
+            }
+            
+            // Добавляем другие доступные аккаунты
+            availableAccounts.forEach(account => {
+                if (account.id !== currentUser.id) {
+                    const accountElement = document.createElement('div');
+                    accountElement.className = 'account-item';
+                    accountElement.innerHTML = `
+                        <div class="account-avatar" style="${account.avatar ? `background-image: url(${account.avatar})` : ''}">
+                            ${!account.avatar ? account.name.split(' ').map(n => n[0]).join('') : ''}
+                        </div>
+                        <div class="account-info">
+                            <div class="account-name">${account.name}</div>
+                            <div class="account-id">${account.uniqueId}</div>
+                        </div>
+                    `;
+                    accountElement.addEventListener('click', () => {
+                        switchAccount(account.id);
+                    });
+                    accountsList.appendChild(accountElement);
                 }
-            }, 500);
+            });
+            
+            accountsModal.style.display = 'flex';
+        }
+        
+        // Загрузка членов семьи
+        function loadFamilyMembers() {
+            const familyContainer = document.getElementById('familyMembersContainer');
+            familyContainer.innerHTML = '';
+            
+            if (!currentUser.family || currentUser.family.length === 0) {
+                familyContainer.innerHTML = '<div style="text-align: center; padding: 20px; color: var(--text-secondary);">Добавьте членов семьи</div>';
+                return;
+            }
+            
+            currentUser.family.forEach(memberId => {
+                const member = cloudStorage.findUserById(memberId);
+                if (member) {
+                    const memberElement = document.createElement('div');
+                    memberElement.className = 'family-member';
+                    memberElement.innerHTML = `
+                        <div class="family-avatar" style="${member.avatar ? `background-image: url(${member.avatar})` : ''}">
+                            ${!member.avatar ? member.name.split(' ').map(n => n[0]).join('') : ''}
+                        </div>
+                        <div>${member.name}</div>
+                    `;
+                    familyContainer.appendChild(memberElement);
+                }
+            });
+            
+            // Добавляем кнопку добавления
+            const addButton = document.createElement('div');
+            addButton.className = 'family-member add-family';
+            addButton.innerHTML = `<i class="fas fa-plus"></i>`;
+            addButton.addEventListener('click', () => {
+                familyModal.style.display = 'flex';
+                updateFamilyMembersList();
+            });
+            familyContainer.appendChild(addButton);
+        }
+        
+        // Поиск пользователя для добавления в семью
+        function searchFamilyMember() {
+            const searchInput = document.getElementById('familySearchInput');
+            const query = searchInput.value.trim();
+            
+            if (query.length === 0) {
+                document.getElementById('familySearchResults').innerHTML = '';
+                return;
+            }
+            
+            const users = cloudStorage.searchUsers(query);
+            const resultsContainer = document.getElementById('familySearchResults');
+            resultsContainer.innerHTML = '';
+            
+            if (users.length === 0) {
+                resultsContainer.innerHTML = '<div style="padding: 10px; text-align: center; color: var(--text-secondary);">Пользователи не найдены</div>';
+                return;
+            }
+            
+            users.forEach(user => {
+                // Пропускаем текущего пользователя и уже добавленных в семью
+                if (user.id === currentUser.id || 
+                    (currentUser.family && currentUser.family.includes(user.id))) {
+                    return;
+                }
+                
+                const userElement = document.createElement('div');
+                userElement.className = 'family-member-item';
+                userElement.innerHTML = `
+                    <div class="family-member-info">
+                        <div class="family-member-avatar" style="${user.avatar ? `background-image: url(${user.avatar})` : ''}">
+                            ${!user.avatar ? user.name.split(' ').map(n => n[0]).join('') : ''}
+                        </div>
+                        <div>
+                            <div>${user.name}</div>
+                            <div style="font-size: 12px; color: var(--text-secondary);">${user.uniqueId}</div>
+                        </div>
+                    </div>
+                    <div class="add-family-member" data-user-id="${user.id}">
+                        <i class="fas fa-plus"></i> Добавить
+                    </div>
+                `;
+                resultsContainer.appendChild(userElement);
+            });
+            
+            // Добавляем обработчики событий для кнопок добавления
+            document.querySelectorAll('.add-family-member').forEach(button => {
+                button.addEventListener('click', function() {
+                    const userId = parseInt(this.dataset.userId);
+                    addFamilyMember(userId);
+                });
+            });
+        }
+        
+        // Добавление члена семьи
+        function addFamilyMember(userId) {
+            if (!currentUser.family) {
+                currentUser.family = [];
+            }
+            
+            // Проверяем, не добавлен ли уже этот пользователь
+            if (currentUser.family.includes(userId)) {
+                alert('Этот пользователь уже в вашей семье');
+                return;
+            }
+            
+            currentUser.family.push(userId);
+            cloudStorage.updateUser(currentUser);
+            loadFamilyMembers();
+            document.getElementById('familySearchInput').value = '';
+            document.getElementById('familySearchResults').innerHTML = '';
+            
+            // Обновляем список членов семьи в модальном окне
+            updateFamilyMembersList();
+            
+            cloudStorage.showStatus('Пользователь добавлен в семью');
+        }
+        
+        // Удаление члена семьи
+        function removeFamilyMember(userId) {
+            if (!currentUser.family) return;
+            
+            currentUser.family = currentUser.family.filter(id => id !== userId);
+            cloudStorage.updateUser(currentUser);
+            loadFamilyMembers();
+            updateFamilyMembersList();
+            
+            cloudStorage.showStatus('Пользователь удален из семьи');
+        }
+        
+        // Обновление списка членов семьи в модальном окне
+        function updateFamilyMembersList() {
+            const membersList = document.getElementById('familyMembersList');
+            membersList.innerHTML = '';
+            
+            if (!currentUser.family || currentUser.family.length === 0) {
+                membersList.innerHTML = '<div style="padding: 10px; text-align: center; color: var(--text-secondary);">Нет членов семьи</div>';
+                return;
+            }
+            
+            currentUser.family.forEach(memberId => {
+                const member = cloudStorage.findUserById(memberId);
+                if (member) {
+                    const memberElement = document.createElement('div');
+                    memberElement.className = 'family-member-item';
+                    memberElement.innerHTML = `
+                        <div class="family-member-info">
+                            <div class="family-member-avatar" style="${member.avatar ? `background-image: url(${member.avatar})` : ''}">
+                                ${!member.avatar ? member.name.split(' ').map(n => n[0]).join('') : ''}
+                            </div>
+                            <div>
+                                <div>${member.name}</div>
+                                <div style="font-size: 12px; color: var(--text-secondary);">${member.uniqueId}</div>
+                            </div>
+                        </div>
+                        <div class="remove-family-member" data-user-id="${member.id}">
+                            <i class="fas fa-times"></i>
+                        </div>
+                    `;
+                    membersList.appendChild(memberElement);
+                }
+            });
+            
+            // Добавляем обработчики событий для кнопок удаления
+            document.querySelectorAll('.remove-family-member').forEach(button => {
+                button.addEventListener('click', function() {
+                    const userId = parseInt(this.dataset.userId);
+                    removeFamilyMember(userId);
+                });
+            });
         }
         
         // Загрузка постов
@@ -1972,34 +2924,51 @@
                 return;
             }
             
-            posts.forEach(post => {
+            const userRegDate = new Date(currentUser.registrationDate);
+            const filteredPosts = posts.filter(post => {
+                if (post.userId === currentUser.id) return true;
+                if (post.familyOnly) {
+                    // Проверяем, находится ли пользователь в семье автора поста
+                    const postAuthor = cloudStorage.findUserById(post.userId);
+                    return postAuthor && postAuthor.family && postAuthor.family.includes(currentUser.id);
+                }
+                if (post.showToNewUsers) {
+                    const postDate = new Date(post.timestamp);
+                    return userRegDate >= postDate;
+                }
+                return true;
+            });
+            
+            filteredPosts.forEach(post => {
                 const postElement = document.createElement('div');
                 postElement.className = 'post';
-                postElement.setAttribute('data-post-id', post.id);
                 
-                // Получаем информацию о пользователе для отображения верификации
-                const postUser = cloudStorage.findUserById(post.userId);
-                const isVerified = postUser ? postUser.isVerified : false;
+                let mediaContent = '';
+                if (post.image) {
+                    mediaContent = `<img src="${post.image}" alt="Post image" class="post-image">`;
+                } else if (post.video) {
+                    mediaContent = `<video controls class="post-image video-player">
+                                      <source src="${post.video}" type="video/mp4">
+                                      Ваш браузер не поддерживает видео.
+                                   </video>`;
+                }
                 
                 postElement.innerHTML = `
                     <div class="post-header">
                         <div class="avatar" style="${post.userAvatar ? `background-image: url(${post.userAvatar})` : ''}">${!post.userAvatar ? post.userName.split(' ').map(n => n[0]).join('') : ''}</div>
                         <div class="post-user">
-                            <div class="name">${post.userName}${isVerified ? '<span class="verified-badge"><i class="fas fa-check-circle"></i></span>' : ''}</div>
+                            <div class="name">${post.userName}</div>
                             <div class="time">
                                 ${formatTime(post.timestamp)} <i class="fas fa-globe-americas"></i>
                             </div>
                         </div>
-                        <div class="nav-icon">
-                            <i class="fas fa-ellipsis-h"></i>
-                        </div>
+                        ${post.showToNewUsers ? '<div class="post-badge">Новым пользователям</div>' : ''}
+                        ${post.familyOnly ? '<div class="post-badge" style="background: var(--family);">Семья</div>' : ''}
                     </div>
-                    
                     <div class="post-content">
                         <div class="post-text">${post.text}</div>
-                        ${post.image ? `<img src="${post.image}" alt="Post image" class="post-image">` : ''}
+                        ${mediaContent}
                     </div>
-                    
                     <div class="post-stats">
                         <div class="likes">
                             <i class="fas fa-thumbs-up"></i> ${post.likes.length}
@@ -2008,7 +2977,6 @@
                             ${post.comments.length} комментария
                         </div>
                     </div>
-                    
                     <div class="post-actions-row">
                         <div class="post-action-btn ${post.likes.includes(currentUser.id) ? 'active' : ''}" data-post-id="${post.id}">
                             <i class="${post.likes.includes(currentUser.id) ? 'fas' : 'far'} fa-thumbs-up"></i>
@@ -2023,27 +2991,21 @@
                             <span>Поделиться</span>
                         </div>
                     </div>
-                    
                     <div class="comments">
-                        ${post.comments.map(comment => {
-                            const commentUser = cloudStorage.findUserById(comment.userId);
-                            const commentIsVerified = commentUser ? commentUser.isVerified : false;
-                            return `
-                                <div class="comment" data-comment-id="${comment.id}">
-                                    <div class="avatar" style="${comment.userAvatar ? `background-image: url(${comment.userAvatar})` : ''}">${!comment.userAvatar ? comment.userName.split(' ').map(n => n[0]).join('') : ''}</div>
-                                    <div class="comment-content">
-                                        <div class="name">${comment.userName}${commentIsVerified ? '<span class="verified-badge"><i class="fas fa-check-circle"></i></span>' : ''}</div>
-                                        <div class="text">${comment.text}</div>
-                                        <div class="comment-actions">
-                                            <span class="comment-action">Нравится</span>
-                                            <span class="comment-action">Ответить</span>
-                                            <span class="comment-action">${formatTime(comment.timestamp)}</span>
-                                        </div>
+                        ${post.comments.map(comment => `
+                            <div class="comment">
+                                <div class="avatar" style="${comment.userAvatar ? `background-image: url(${comment.userAvatar})` : ''}">${!comment.userAvatar ? comment.userName.split(' ').map(n => n[0]).join('') : ''}</div>
+                                <div class="comment-content">
+                                    <div class="name">${comment.userName}</div>
+                                    <div class="text">${comment.text}</div>
+                                    <div class="comment-actions">
+                                        <span class="comment-action">Нравится</span>
+                                        <span class="comment-action">Ответить</span>
+                                        <span class="comment-action">${formatTime(comment.timestamp)}</span>
                                     </div>
                                 </div>
-                            `;
-                        }).join('')}
-                        
+                            </div>
+                        `).join('')}
                         <div class="add-comment">
                             <div class="avatar" style="${currentUser.avatar ? `background-image: url(${currentUser.avatar})` : ''}">${!currentUser.avatar ? currentUser.name.split(' ').map(n => n[0]).join('') : ''}</div>
                             <input type="text" placeholder="Напишите комментарий..." data-post-id="${post.id}">
@@ -2054,7 +3016,7 @@
                 postsContainer.appendChild(postElement);
             });
             
-            // Добавляем обработчики событий для лайков и комментариев
+            // Обработчики для лайков
             document.querySelectorAll('.post-action-btn[data-post-id]').forEach(button => {
                 if (button.querySelector('.fa-thumbs-up')) {
                     button.addEventListener('click', function() {
@@ -2074,6 +3036,7 @@
                 }
             });
             
+            // Обработчики для комментариев
             document.querySelectorAll('.add-comment input').forEach(input => {
                 input.addEventListener('keypress', function(e) {
                     if (e.key === 'Enter' && this.value.trim() !== '') {
@@ -2102,7 +3065,6 @@
         function loadStories() {
             const stories = cloudStorage.getStories();
             
-            // Оставляем только первую историю (кнопку создания)
             const createStoryBtn = document.getElementById('createStoryBtn');
             storiesContainer.innerHTML = '';
             storiesContainer.appendChild(createStoryBtn);
@@ -2118,6 +3080,34 @@
                 `;
                 
                 storiesContainer.appendChild(storyElement);
+            });
+        }
+        
+        // Загрузка контактов
+        function loadContacts() {
+            const contactsList = document.getElementById('contactsList');
+            const users = cloudStorage.getUsers();
+            
+            // Показываем только публичных пользователей, кроме текущего
+            const contacts = users.filter(user => 
+                user.isPublic && user.id !== currentUser.id
+            ).slice(0, 10);
+            
+            if (contacts.length === 0) {
+                contactsList.innerHTML = '<div style="padding: 10px; text-align: center; color: var(--text-secondary);">Контакты не найдены</div>';
+                return;
+            }
+            
+            contacts.forEach(user => {
+                const contactElement = document.createElement('div');
+                contactElement.className = 'contact';
+                contactElement.innerHTML = `
+                    <div class="avatar" style="${user.avatar ? `background-image: url(${user.avatar})` : ''}">
+                        ${!user.avatar ? user.name.split(' ').map(n => n[0]).join('') : ''}
+                    </div>
+                    <div>${user.name}</div>
+                `;
+                contactsList.appendChild(contactElement);
             });
         }
         
